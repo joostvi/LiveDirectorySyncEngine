@@ -1,6 +1,6 @@
 ﻿namespace LiveDirectorySyncEngine
 {
-    partial class Service1
+    partial class SyncService
     {
         /// <summary> 
         /// Required designer variable.

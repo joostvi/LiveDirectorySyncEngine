@@ -1,0 +1,4 @@
+Here is where I got my inspiration from:
+
+https://stackoverflow.com/questions/15017506/using-filesystemwatcher-to-monitor-a-directory
+https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp

@@ -1,0 +1,9 @@
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\bin\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.deps.json
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\bin\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.dll
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\bin\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.pdb
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\obj\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.csprojResolveAssemblyReference.cache
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\obj\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.csproj.CoreCompileInputs.cache
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\obj\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.AssemblyInfoInputs.cache
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\obj\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.AssemblyInfo.cs
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\obj\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.dll
+C:\Users\Joost\Documents\GitHub\LiveDirectorySyncEngine\LiveDirectorySyncEngineLogic\obj\Debug\netstandard2.0\LiveDirectorySyncEngineLogic.pdb
