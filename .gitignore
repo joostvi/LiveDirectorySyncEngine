@@ -1,3 +1,9 @@
 .vs/*
 *.cache
 LiveDirectorySyncEngine/obj/*
+*/obj/*
+*/bin/*
+*/bin/Debug/*
+*/bin/Release/*
+LiveDirectorySyncEngine/bin/*
+LiveDirectorySyncEngine/bin/Debug/*
