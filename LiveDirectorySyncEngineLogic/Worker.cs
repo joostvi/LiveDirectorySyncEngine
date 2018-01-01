@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiveDirectorySyncEngineLogic.SyncActionModel;
+using System;
 using System.IO;
 
 namespace LiveDirectorySyncEngineLogic
@@ -12,14 +13,20 @@ namespace LiveDirectorySyncEngineLogic
     {
         private Settings _Settings;
         private FileSystemWatcher _watcher;
+        private ISyncAction _syncAction;
+
+        public RealtimeSyncWorker()
+        {
+            _Settings = new Settings("C:\\tmp\\TestSource", "C:\\tmp\\TestTarget");
+            _syncAction = new RealtimeNoneCachedSync(_Settings);
+        }
 
         public void Start()
         {
             if (_watcher != null)
             {
                 throw new InvalidOperationException("Worker already started? Please stop first.");
-            }
-            _Settings = new Settings("C:\\tmp\\TestSource", "C:\\tmp\\TestTarget");
+            }            
             Watch();
         }
 
@@ -32,14 +39,15 @@ namespace LiveDirectorySyncEngineLogic
         private void Watch()
         {
             _watcher = new FileSystemWatcher();
+            _watcher.IncludeSubdirectories = true;
             _watcher.Path = _Settings.SourcePath;
-            _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             _watcher.Filter = "*.*";
-            _watcher.Created += new FileSystemEventHandler(OnChanged);
+            _watcher.Created += new FileSystemEventHandler(OnCreate);
             _watcher.Changed += new FileSystemEventHandler(OnChanged);
             _watcher.Deleted += new FileSystemEventHandler(OnDeleted);
             _watcher.Renamed += new RenamedEventHandler(OnRenamed);
-            _watcher.EnableRaisingEvents = true;
+            _watcher.EnableRaisingEvents = true;     
             
         }
 
@@ -47,24 +55,33 @@ namespace LiveDirectorySyncEngineLogic
         {
             return _Settings.TargetPath + "\\" + filename;
         }
-        private void OnRenamed(object sender, RenamedEventArgs e)
+
+        public void OnRenamed(object sender, RenamedEventArgs e)
         {
-            string oldName = e.OldName;
-            string newName = e.Name;
-            File.Move(AddTargetPath(oldName), AddTargetPath(newName));
+            SyncRenameActionCommand command = new SyncRenameActionCommand();
+            command.OldFileName = e.OldName;
+            command.NewFileName = e.Name;
+            _syncAction.Rename(command);
         }
 
-        private void OnDeleted(object sender, FileSystemEventArgs e)
+        public void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            throw new NotImplementedException();
+            SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
+            _syncAction.Delete(new SyncDeleteActionCommand() { SourceFile = syncFileInfo });
         }
 
-        private void OnChanged(object source, FileSystemEventArgs e)
+        public void OnChanged(object source, FileSystemEventArgs e)
         {
-            //Copies file to another directory.
-            string aFile = e.FullPath;
-            string aTarget = aFile.Replace(_Settings.SourcePath, _Settings.TargetPath);
-            File.Copy(aFile, aTarget, true);
+            SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
+            //not interested in update of folders as we check the folder content.
+            if (syncFileInfo.IsDirectory()) return;
+            _syncAction.Update(new SyncUpdateActionCommand() { SourceFile = syncFileInfo });
+        }
+
+        public void OnCreate(object source, FileSystemEventArgs e)
+        {
+            SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
+            _syncAction.Create(new SyncCreateActionCommand() { SourceFile = syncFileInfo });
         }
     }
 }
