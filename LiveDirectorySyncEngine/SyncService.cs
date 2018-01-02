@@ -1,5 +1,6 @@
 ﻿using System.ServiceProcess;
 using LiveDirectorySyncEngineLogic;
+using LiveDirectorySyncEngineLogic.Settings;
 
 namespace LiveDirectorySyncEngine
 {

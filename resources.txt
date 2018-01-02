@@ -3,3 +3,7 @@ Here is where I got my inspiration from:
 https://stackoverflow.com/questions/15017506/using-filesystemwatcher-to-monitor-a-directory
 https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
 https://stackoverflow.com/questions/1395205/better-way-to-check-if-a-path-is-a-file-or-a-directory
+
+https://stackoverflow.com/questions/453161/best-practice-to-save-application-settings-in-a-windows-forms-application
+
+https://stackoverflow.com/questions/52797/how-do-i-get-the-path-of-the-assembly-the-code-is-in

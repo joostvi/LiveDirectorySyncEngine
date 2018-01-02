@@ -6,27 +6,37 @@
         xmlns:local="clr-namespace:LiveDirectorySyncEngineConsoleApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button x:Name="btnRunSyncApp" Content="Run sync engine" HorizontalAlignment="Left" Margin="163,150,0,0" VerticalAlignment="Top" Width="221" RenderTransformOrigin="0.5,0.5" Height="25" Click="BtnRunSyncApp_Click">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.321"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Button.RenderTransform>
-        </Button>
-        <Button x:Name="btnStopSyncApp" Content="Stop sync engine" HorizontalAlignment="Left" Margin="162,191,0,0" VerticalAlignment="Top" Width="221" RenderTransformOrigin="0.5,0.5" Height="25" Click="btnStopSyncApp_Click">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.321"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Button.RenderTransform>
-        </Button>
+    <Grid Margin="0,0,0,102">
+        <TabControl HorizontalAlignment="Left" Height="165" Margin="30,25,0,0" VerticalAlignment="Top" Width="459" RenderTransformOrigin="0.5,0.5">
+
+            <TabItem Header="Actions">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="72*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="371*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnRunSyncApp" Content="Run sync engine" HorizontalAlignment="Left" Margin="25,30,0,0" VerticalAlignment="Top" Width="221" RenderTransformOrigin="0.5,0.5" Height="25" Click="BtnRunSyncApp_Click" Grid.Column="2">
+
+                    </Button>
+                    <Button x:Name="btnStopSyncApp" Content="Stop sync engine" HorizontalAlignment="Left" Margin="25,65,0,0" VerticalAlignment="Top" Width="221" RenderTransformOrigin="0.5,0.5" Height="25" Click="btnStopSyncApp_Click" Grid.Column="2">
+
+                    </Button>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.5,0.5" Margin="0">
+                    <Button x:Name="Save" Content="Save" HorizontalAlignment="Left" Margin="332,95,0,0" VerticalAlignment="Top" Width="75" Click="Save_Click"/>
+                    <Label x:Name="LblSource" Content="Source:" HorizontalAlignment="Left" Height="25" Margin="14,26,0,0" VerticalAlignment="Top" Width="78" RenderTransformOrigin="0.5,0.5">
+
+                    </Label>
+                    <Label x:Name="LblTarget" Content="Target:" HorizontalAlignment="Left" Height="25" Margin="17,61,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBox x:Name="Source" HorizontalAlignment="Left" Height="23" Margin="97,27,0,0" TextWrapping="Wrap" Text="C:\tmp\TestSource" VerticalAlignment="Top" Width="310"/>
+                    <TextBox x:Name="Target" HorizontalAlignment="Left" Height="23" Margin="97,62,0,0" TextWrapping="Wrap" Text="C:\tmp\TestTarget" VerticalAlignment="Top" Width="310"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>

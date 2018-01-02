@@ -1,4 +1,5 @@
 ﻿using LiveDirectorySyncEngineLogic.SyncActionModel;
+using LiveDirectorySyncEngineLogic.Settings;
 using System;
 using System.IO;
 
@@ -11,14 +12,16 @@ namespace LiveDirectorySyncEngineLogic
     /// </summary>
     public class RealtimeSyncWorker
     {
-        private Settings _Settings;
+        private SyncSettings _Settings;
         private FileSystemWatcher _watcher;
         private ISyncAction _syncAction;
+        private ISyncSettingsRepository _syncSettingsRepository;
 
         public RealtimeSyncWorker()
         {
-            _Settings = new Settings("C:\\tmp\\TestSource", "C:\\tmp\\TestTarget");
-            _syncAction = new RealtimeNoneCachedSync(_Settings);
+            _syncSettingsRepository = Container.GetSyncSettingsRepository();
+            _Settings = _syncSettingsRepository.Load();
+            _syncAction = Container.GetRealtimeNoneCacheSyncActionHandler(_Settings);
         }
 
         public void Start()

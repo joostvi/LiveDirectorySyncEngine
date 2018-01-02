@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LiveDirectorySyncEngineLogic.Settings;
 
 namespace LiveDirectorySyncEngineConsoleApp
 {
@@ -25,6 +26,15 @@ namespace LiveDirectorySyncEngineConsoleApp
         {
             InitializeComponent();
             btnStopSyncApp.IsEnabled = false;
+            LoadSettings();
+        }
+
+        private void LoadSettings()
+        {
+            ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
+            SyncSettings settings = syncSettingsRepository.Load();
+            Source.Text = settings.SourcePath;
+            Target.Text = settings.TargetPath;
         }
 
         private RealtimeSyncWorker worker;
@@ -41,6 +51,13 @@ namespace LiveDirectorySyncEngineConsoleApp
             worker.Stop();
             btnRunSyncApp.IsEnabled = true;
             btnStopSyncApp.IsEnabled = false;
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
+            SyncSettings syncSetting = new SyncSettings(Source.Text, Target.Text);
+            syncSettingsRepository.Save(syncSetting);
         }
     }
 }
