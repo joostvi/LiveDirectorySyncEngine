@@ -1,27 +1,33 @@
-﻿using System.IO;
-using LiveDirectorySyncEngineLogic.Generic;
+﻿using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using LiveDirectorySyncEngineLogic.Settings;
 
 namespace LiveDirectorySyncEngineLogic
 {
-    public class GetRealtimeNoneCacheSyncActionHandler : ISyncAction
+    public class RealtimeNoneCacheSyncActionHandler : ISyncAction
     {
         private SyncSettings _Settings;
+        private IFileSystem _FileSystem;
 
-        public GetRealtimeNoneCacheSyncActionHandler(SyncSettings settings)
+        public RealtimeNoneCacheSyncActionHandler(SyncSettings settings, IFileSystem fileSystem)
         {
             _Settings = settings;
+            _FileSystem = fileSystem;
+        }
+
+        private static string ConcatPathAndFile(string path, string filename)
+        {
+            return path.TrimEnd('\\') + "\\" + filename.TrimStart('\\');
         }
 
         private string AddTargetPath(string filename)
         {
-            return _Settings.TargetPath + "\\" + filename;
+            return ConcatPathAndFile( _Settings.TargetPath, filename);
         }
 
         private string AddSourcePath(string filename)
         {
-            return _Settings.SourcePath + "\\" + filename;
+            return ConcatPathAndFile(_Settings.SourcePath, filename);
         }
 
         public void Rename(SyncRenameActionCommand command)
@@ -35,12 +41,12 @@ namespace LiveDirectorySyncEngineLogic
                 //TODO handle copy of content as well in case of directory
                 return;
             }
-            if (FileHelpers.IsDirectory(oldName))
+            if (_FileSystem.IsDirectory(oldName))
             {
-                Directory.Move(oldName, newName);
+                _FileSystem.Directory.Move(oldName, newName);
                 return;
             }
-            File.Move(oldName, newName);
+            _FileSystem.File.Move(oldName, newName);
         }
 
         public void Delete(SyncDeleteActionCommand command)
@@ -49,12 +55,12 @@ namespace LiveDirectorySyncEngineLogic
             string aTarget = aFile.Replace(_Settings.SourcePath, _Settings.TargetPath);
             if (!ExistsFileOrFolder(aTarget)) return;
 
-            if (FileHelpers.IsDirectory(aTarget))
+            if (_FileSystem.IsDirectory(aTarget))
             {
-                Directory.Delete(aTarget, true);
+                _FileSystem.Directory.Delete(aTarget, true);
                 return;
             }
-            File.Delete(aTarget);
+            _FileSystem.File.Delete(aTarget);
         }
 
         public void Update(SyncUpdateActionCommand command)
@@ -69,7 +75,7 @@ namespace LiveDirectorySyncEngineLogic
                 //TODO Handle update content as well in case of directory.
                 return;
             }
-            File.Copy(aFile, aTarget, true);
+            _FileSystem.File.Copy(aFile, aTarget, true);
         }
 
         public void Create(SyncCreateActionCommand command)
@@ -81,19 +87,19 @@ namespace LiveDirectorySyncEngineLogic
             Create(aSource, aTarget);
         }
 
-        private static void Create(string aSource, string aTarget)
+        private void Create(string aSource, string aTarget)
         {
-            if (FileHelpers.IsDirectory(aSource))
+            if (_FileSystem.IsDirectory(aSource))
             {
-                Directory.CreateDirectory(aTarget);
+                _FileSystem.Directory.Create(aTarget);
                 return;
             }
-            File.Copy(aSource, aTarget, true);
+            _FileSystem.File.Copy(aSource, aTarget, true);
         }
 
-        private static bool ExistsFileOrFolder(string fileOrFolder)
+        private bool ExistsFileOrFolder(string fileOrFolder)
         {
-            return File.Exists(fileOrFolder) || Directory.Exists(fileOrFolder);
+            return _FileSystem.File.Exists(fileOrFolder) || _FileSystem.Directory.Exists(fileOrFolder);
         }
     }
 }

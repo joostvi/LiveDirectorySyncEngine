@@ -8,3 +8,4 @@ LiveDirectorySyncEngine/obj/*
 LiveDirectorySyncEngine/bin/*
 LiveDirectorySyncEngine/bin/Debug/*
 LiveDirectorySyncEngineLogic/obj/*
+packages/*

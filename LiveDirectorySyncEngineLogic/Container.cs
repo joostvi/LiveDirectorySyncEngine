@@ -1,4 +1,5 @@
-﻿using LiveDirectorySyncEngineLogic.Settings;
+﻿using LiveDirectorySyncEngineLogic.Generic;
+using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 
 namespace LiveDirectorySyncEngineLogic
@@ -12,7 +13,12 @@ namespace LiveDirectorySyncEngineLogic
 
         public static ISyncAction GetRealtimeNoneCacheSyncActionHandler(SyncSettings settings)
         {
-            return new GetRealtimeNoneCacheSyncActionHandler(settings);
+            return new RealtimeNoneCacheSyncActionHandler(settings, GetFileSystem());
+        }
+
+        public static IFileSystem GetFileSystem()
+        {
+            return new FileSystem();
         }
     }
 }

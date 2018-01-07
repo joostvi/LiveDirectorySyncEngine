@@ -2,6 +2,7 @@
 using LiveDirectorySyncEngineLogic.Settings;
 using System;
 using System.IO;
+using LiveDirectorySyncEngineLogic.Generic;
 
 namespace LiveDirectorySyncEngineLogic
 {
@@ -16,12 +17,14 @@ namespace LiveDirectorySyncEngineLogic
         private FileSystemWatcher _watcher;
         private ISyncAction _syncAction;
         private ISyncSettingsRepository _syncSettingsRepository;
+        private IFileSystem _FileSystem;
 
         public RealtimeSyncWorker()
         {
             _syncSettingsRepository = Container.GetSyncSettingsRepository();
             _Settings = _syncSettingsRepository.Load();
             _syncAction = Container.GetRealtimeNoneCacheSyncActionHandler(_Settings);
+            _FileSystem = Container.GetFileSystem();
         }
 
         public void Start()
@@ -77,7 +80,7 @@ namespace LiveDirectorySyncEngineLogic
         {
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             //not interested in update of folders as we check the folder content.
-            if (syncFileInfo.IsDirectory()) return;
+            if (_FileSystem.IsDirectory(e.FullPath)) return;
             _syncAction.Update(new SyncUpdateActionCommand() { SourceFile = syncFileInfo });
         }
 
