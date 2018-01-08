@@ -1,7 +1,7 @@
 language: csharp
 solution: LiveDirectorySyncEngine.sln
 mono: none
-dotnet: 4.6.1
+dotnet: 2.1.1
 install:
   - nuget restore LiveDirectorySyncEngine.sln
 script:
