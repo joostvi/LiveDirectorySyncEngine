@@ -74,7 +74,19 @@ namespace LiveDirectorySyncEngineLogic
                 Create(aFile, aTarget);
                 return;
             }
-            _FileSystem.File.Copy(aFile, aTarget, true);
+            CopyFile(aFile, aTarget);
+        }
+
+        private void CopyFile(string aFile, string aTarget)
+        {
+            try
+            {
+                _FileSystem.File.Copy(aFile, aTarget, true);
+            }
+            catch (FileNotFoundException)
+            {
+                //do nothing assume this is in an async scenario where update is followed by delete. 
+            }
         }
 
         public void Create(SyncCreateActionCommand command)
@@ -97,7 +109,7 @@ namespace LiveDirectorySyncEngineLogic
                     return;
                 }
 
-                _FileSystem.File.Copy(aSource, aTarget, true);
+                CopyFile(aSource, aTarget);
             }
             catch (DirectoryNotFoundException)
             {

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using LiveDirectorySyncEngineLogic;
 using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using LiveDirectorySyncEngineTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace LiveDirectorySyncEngineTests
 {
@@ -102,6 +104,37 @@ namespace LiveDirectorySyncEngineTests
             };
             GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
             mockHelper.IFileMock.Verify(a => a.Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true));
+        }
+
+        [TestMethod]
+        public void TestCreate_CreateFile_SourceDeleted()
+        {
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
+            mockHelper.Setup();
+            mockHelper.IFileMock.Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<FileNotFoundException>();
+
+            SyncCreateActionCommand command = new SyncCreateActionCommand()
+            {
+                SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
+            };
+            //this logic should accept file not found
+            GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
+        }
+
+        [TestMethod]
+        public void TestCreate_UpdateFile_SourceDeleted()
+        {
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
+            mockHelper.FileExists = true;
+            mockHelper.Setup();
+            mockHelper.IFileMock.Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<FileNotFoundException>();
+
+            SyncUpdateActionCommand command = new SyncUpdateActionCommand()
+            {
+                SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
+            };
+            //this logic should accept file not found
+            GetHandler(mockHelper.IFileSystemMock.Object).Update(command);
         }
 
         [TestMethod]
