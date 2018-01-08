@@ -1,6 +1,9 @@
 Testing framework: 
 https://github.com/Moq/moq4
 
+Continues integration:
+https://travis-ci.org/
+
 Inspiration:
 https://stackoverflow.com/questions/15017506/using-filesystemwatcher-to-monitor-a-directory
 https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
