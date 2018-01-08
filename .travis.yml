@@ -1,8 +1,5 @@
 language: csharp
-solution: LiveDirectorySyncEngine.sln
-mono: none
-dotnet: 2.1.1
-install:
-  - nuget restore LiveDirectorySyncEngine.sln
-script:
- - dotnet restore
+dist: trusty  
+script:  
+ - msbuild /t:restore /p:Configuration=Release LiveDirectorySyncEngine.sln
+ - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./LiveDirectorySyncEngineTests/bin/Release/LiveDirectorySyncEngine\LiveDirectorySyncEngineTests.dll
