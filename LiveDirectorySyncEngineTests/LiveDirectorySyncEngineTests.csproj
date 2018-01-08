@@ -58,6 +58,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mocks\DirectoryMock.cs" />
+    <Compile Include="Mocks\FileMock.cs" />
+    <Compile Include="Mocks\FileSystemMock.cs" />
+    <Compile Include="Mocks\FileSystemMockHelper.cs" />
     <Compile Include="RealtimeNoneCacheSyncActionHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -13,7 +13,7 @@ namespace LiveDirectorySyncEngineLogic
 
         public static ISyncAction GetRealtimeNoneCacheSyncActionHandler(SyncSettings settings)
         {
-            return new RealtimeNoneCacheSyncActionHandler(settings, GetFileSystem());
+            return new RealtimeNoneCachedSyncActionHandler(settings, GetFileSystem());
         }
 
         public static IFileSystem GetFileSystem()

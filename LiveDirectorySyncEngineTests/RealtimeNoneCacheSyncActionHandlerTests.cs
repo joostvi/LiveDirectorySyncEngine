@@ -3,27 +3,27 @@ using LiveDirectorySyncEngineLogic;
 using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
+using LiveDirectorySyncEngineTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace LiveDirectorySyncEngineTests
 {
     [TestClass]
-    public class RealtimeNoneCacheSyncActionHandlerTests
+    public class RealtimeNoneCachedSyncActionHandlerTests
     {
         private const string _DefaultSourcePath = @"c:\source\";
         private const string _DefaultTargetPath = @"c:\target\";
 
-        private RealtimeNoneCacheSyncActionHandler GetHandler(IFileSystem fileSystem)
+        private RealtimeNoneCachedSyncActionHandler GetHandler(IFileSystem fileSystem)
         {
             SyncSettings setings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath);
-            return new RealtimeNoneCacheSyncActionHandler(setings, fileSystem);
+            return new RealtimeNoneCachedSyncActionHandler(setings, fileSystem);
         }
 
         [TestMethod]
         public void TestRename_RenameFile_TargetExists()
         {
-            FileSystemMockHelper mockHelper = new FileSystemMockHelper();
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
             mockHelper.FileExists = true;
             mockHelper.DirectoryExists = false;
             mockHelper.Setup();
@@ -40,7 +40,7 @@ namespace LiveDirectorySyncEngineTests
         [TestMethod]
         public void TestRename_RenameFile_TargetDoesNotExists()
         {
-            FileSystemMockHelper mockHelper = new FileSystemMockHelper();
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
             mockHelper.FileExists = false;
             mockHelper.DirectoryExists = false;
             mockHelper.Setup();
@@ -57,7 +57,7 @@ namespace LiveDirectorySyncEngineTests
         [TestMethod]
         public void TestRename_RenameDirectory_TargetExists()
         {
-            FileSystemMockHelper mockHelper = new FileSystemMockHelper();
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
             mockHelper.FileExists = false;
             mockHelper.DirectoryExists = true;
             mockHelper.IsDirectory = true;
@@ -69,13 +69,13 @@ namespace LiveDirectorySyncEngineTests
                 NewFileName = "NewName"
             };
             GetHandler(mockHelper.IFileSystemMock.Object).Rename(command);
-            mockHelper.IDirecoryMock.Verify(a => a.Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName"));
+            mockHelper.IDirectoryMock.Verify(a => a.Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName"));
         }
 
         [TestMethod]
         public void TestRename_RenameDirectory_TargetDoesNotExists()
         {
-            FileSystemMockHelper mockHelper = new FileSystemMockHelper();
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
             mockHelper.FileExists = false;
             mockHelper.DirectoryExists = false;
             mockHelper.IsDirectory = true;
@@ -87,46 +87,72 @@ namespace LiveDirectorySyncEngineTests
                 NewFileName = "NewName"
             };
             GetHandler(mockHelper.IFileSystemMock.Object).Rename(command);
-            mockHelper.IDirecoryMock.Verify(a => a.Create(_DefaultTargetPath + "NewName"));
+            mockHelper.IDirectoryMock.Verify(a => a.Create(_DefaultTargetPath + "NewName"));
         }
 
-        private static void NewMethod(bool fileExists, out Mock<IFileSystem> fileSystem, out Mock<IFile> file)
+        [TestMethod]
+        public void TestCreate_CreateFile_HappyPath()
         {
-            fileSystem = new Mock<IFileSystem>();
-            file = new Mock<IFile>();
-            file.Setup(a => a.Exists(It.IsAny<string>())).Returns(fileExists);
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
+            mockHelper.Setup();
 
-            Mock<IDirectory> directory = new Mock<IDirectory>();
-            directory.Setup(a => a.Exists(It.IsAny<string>())).Returns(fileExists);
-
-            fileSystem.SetupGet(b => b.File).Returns(file.Object);
-            fileSystem.SetupGet(b => b.Directory).Returns(directory.Object);
-            fileSystem.Setup(c => c.IsDirectory(It.IsAny<string>())).Returns(false);
+            SyncCreateActionCommand command = new SyncCreateActionCommand()
+            {
+                SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
+            };
+            GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
+            mockHelper.IFileMock.Verify(a => a.Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true));
         }
-    }
 
-    public class FileSystemMockHelper
-    {
-        public bool FileExists { get; set; }
-        public bool DirectoryExists { get; set; }
-        public bool IsDirectory { get; set; }
-
-        public Mock<IFileSystem> IFileSystemMock { get; private set; }
-        public Mock<IFile> IFileMock { get; private set; }
-        public Mock<IDirectory> IDirecoryMock { get; private set; }
-
-        public void Setup()
+        [TestMethod]
+        public void TestCreate_CreateFile_NoneExistingTargetFolder()
         {
-            IFileSystemMock = new Mock<IFileSystem>();
-            IFileMock = new Mock<IFile>();
-            IFileMock.Setup(a => a.Exists(It.IsAny<string>())).Returns(FileExists);
+            FileSystemMock fileSystemMock = new FileSystemMock();
 
-            IDirecoryMock = new Mock<IDirectory>();
-            IDirecoryMock.Setup(a => a.Exists(It.IsAny<string>())).Returns(DirectoryExists);
+            SyncCreateActionCommand command = new SyncCreateActionCommand()
+            {
+                SourceFile = new SyncFileInfo(_DefaultSourcePath + "UnknownFolder\\File.txt")
+            };
+            GetHandler(fileSystemMock).Create(command);
 
-            IFileSystemMock.SetupGet(b => b.File).Returns(IFileMock.Object);
-            IFileSystemMock.SetupGet(b => b.Directory).Returns(IDirecoryMock.Object);
-            IFileSystemMock.Setup(c => c.IsDirectory(It.IsAny<string>())).Returns(IsDirectory);
+            DirectoryMock directories = (DirectoryMock)fileSystemMock.Directory;
+            Assert.IsTrue(directories.Directories.Contains(_DefaultTargetPath + "UnknownFolder"));
+
+            FileMock files = (FileMock)fileSystemMock.File;
+            Assert.IsTrue(files.Files.Contains(_DefaultTargetPath + "UnknownFolder\\File.txt"));
+        }
+
+        [TestMethod]
+        public void TestCreate_CreateDirectory_HappyPath()
+        {
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
+            mockHelper.IsDirectory = true;
+            mockHelper.Setup();
+
+            SyncCreateActionCommand command = new SyncCreateActionCommand()
+            {
+                SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
+            };
+            GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
+            mockHelper.IDirectoryMock.Verify(a => a.Create(_DefaultTargetPath + "NewName"));
+        }
+
+        [TestMethod]
+        public void TestCreate_CreateDirectory_NoneExistingTargetFolder()
+        {
+            FileSystemMock fileSystemMock = new FileSystemMock();
+
+            SyncCreateActionCommand command = new SyncCreateActionCommand()
+            {
+                SourceFile = new SyncFileInfo(_DefaultSourcePath + "UnknownFolder\\Directory")
+            };
+            GetHandler(fileSystemMock).Create(command);
+
+            DirectoryMock directories = (DirectoryMock)fileSystemMock.Directory;
+            Assert.IsTrue(directories.Directories.Contains(_DefaultTargetPath + "UnknownFolder\\Directory"));
+
+            FileMock files = (FileMock)fileSystemMock.File;
+            Assert.IsTrue(files.Files.Count == 0);
         }
     }
 }

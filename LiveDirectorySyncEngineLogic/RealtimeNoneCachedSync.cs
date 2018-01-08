@@ -1,15 +1,16 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using LiveDirectorySyncEngineLogic.Settings;
+using System.IO;
 
 namespace LiveDirectorySyncEngineLogic
 {
-    public class RealtimeNoneCacheSyncActionHandler : ISyncAction
+    public class RealtimeNoneCachedSyncActionHandler : ISyncAction
     {
         private SyncSettings _Settings;
         private IFileSystem _FileSystem;
 
-        public RealtimeNoneCacheSyncActionHandler(SyncSettings settings, IFileSystem fileSystem)
+        public RealtimeNoneCachedSyncActionHandler(SyncSettings settings, IFileSystem fileSystem)
         {
             _Settings = settings;
             _FileSystem = fileSystem;
@@ -22,7 +23,7 @@ namespace LiveDirectorySyncEngineLogic
 
         private string AddTargetPath(string filename)
         {
-            return ConcatPathAndFile( _Settings.TargetPath, filename);
+            return ConcatPathAndFile(_Settings.TargetPath, filename);
         }
 
         private string AddSourcePath(string filename)
@@ -38,7 +39,6 @@ namespace LiveDirectorySyncEngineLogic
             {
                 //oeps stuff not in sync we need to repair
                 Create(AddSourcePath(command.NewFileName), newName);
-                //TODO handle copy of content as well in case of directory
                 return;
             }
             if (_FileSystem.IsDirectory(oldName))
@@ -72,7 +72,6 @@ namespace LiveDirectorySyncEngineLogic
             {
                 //oeps stuff not in sync we need to repair
                 Create(aFile, aTarget);
-                //TODO Handle update content as well in case of directory.
                 return;
             }
             _FileSystem.File.Copy(aFile, aTarget, true);
@@ -89,12 +88,23 @@ namespace LiveDirectorySyncEngineLogic
 
         private void Create(string aSource, string aTarget)
         {
-            if (_FileSystem.IsDirectory(aSource))
+            try
             {
-                _FileSystem.Directory.Create(aTarget);
-                return;
+                if (_FileSystem.IsDirectory(aSource))
+                {
+                    _FileSystem.Directory.Create(aTarget);
+                    //todo this might be called in out of sync scenario then we want to copy data from source folder as well.
+                    return;
+                }
+
+                _FileSystem.File.Copy(aSource, aTarget, true);
             }
-            _FileSystem.File.Copy(aSource, aTarget, true);
+            catch (DirectoryNotFoundException)
+            {
+                //oeps directory does not exists lets create it.
+                Create(aSource.Substring(0, aSource.LastIndexOf("\\")), aTarget.Substring(0, aTarget.LastIndexOf("\\")));
+                Create(aSource, aTarget);
+            }
         }
 
         private bool ExistsFileOrFolder(string fileOrFolder)
