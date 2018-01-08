@@ -1,2 +1,4 @@
 language: csharp
 solution: LiveDirectorySyncEngine.sln
+install:
+  - nuget restore LiveDirectorySyncEngine.sln
