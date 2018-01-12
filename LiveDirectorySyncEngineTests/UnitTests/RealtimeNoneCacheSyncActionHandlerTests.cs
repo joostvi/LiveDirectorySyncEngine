@@ -8,7 +8,7 @@ using LiveDirectorySyncEngineTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace LiveDirectorySyncEngineTests
+namespace LiveDirectorySyncEngineTests.UnitTests
 {
     [TestClass]
     public class RealtimeNoneCachedSyncActionHandlerTests
