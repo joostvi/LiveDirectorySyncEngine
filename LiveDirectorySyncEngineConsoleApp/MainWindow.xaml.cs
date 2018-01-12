@@ -1,19 +1,9 @@
 ﻿using LiveDirectorySyncEngineLogic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LiveDirectorySyncEngineLogic.Settings;
+using LiveDirectorySyncEngineLogic.Generic.Log;
+using LiveDirectorySyncEngineConsoleApp.Logging;
 
 namespace LiveDirectorySyncEngineConsoleApp
 {
@@ -22,6 +12,9 @@ namespace LiveDirectorySyncEngineConsoleApp
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private SyncWorker _Worker;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -35,29 +28,53 @@ namespace LiveDirectorySyncEngineConsoleApp
             SyncSettings settings = syncSettingsRepository.Load();
             Source.Text = settings.SourcePath;
             Target.Text = settings.TargetPath;
+            Log.Level = EnumLogLevel.Info;  //TODO Make optional
+            Log.AddLogger(new ScreenLogger(AddLog));
+            Log.Info("Started application");
         }
 
-        private RealtimeSyncWorker worker;
         private void BtnRunSyncApp_Click(object sender, RoutedEventArgs e)
         {
-            worker = new RealtimeSyncWorker();
-            worker.Start();
+            SyncSettings settings = GetSettings();
+            _Worker = new SyncWorker(settings, Container.GetRealtimeNoneCacheSyncActionHandler(settings));
+            _Worker.Start();
             btnRunSyncApp.IsEnabled = false;
             btnStopSyncApp.IsEnabled = true;
         }
 
-        private void btnStopSyncApp_Click(object sender, RoutedEventArgs e)
+        private void BtnStopSyncApp_Click(object sender, RoutedEventArgs e)
         {
-            worker.Stop();
+            _Worker.Stop();
             btnRunSyncApp.IsEnabled = true;
             btnStopSyncApp.IsEnabled = false;
+        }
+
+        private SyncSettings GetSettings()
+        {
+            return new SyncSettings(Source.Text, Target.Text, EnumLogLevel.Error);
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
-            SyncSettings syncSetting = new SyncSettings(Source.Text, Target.Text);
+            SyncSettings syncSetting = GetSettings();
             syncSettingsRepository.Save(syncSetting);
         }
+
+        #region logging
+        public void UpdateLogText(string line)
+        {
+            LogContent.Text += line;
+        }
+
+        public delegate void UpdateLogTextDelegate(string line);
+        //see https://msdn.microsoft.com/en-us/library/system.windows.threading.dispatcher(v=vs.110).aspx?cs-save-lang=1&cs-lang=csharp#code-snippet-3
+
+        public void AddLog(object sender, ScreenLogEventArgs logThis)
+        {
+            string line = "\r\n" + DateTime.Now.ToString() + " " + logThis.Level.ToString() + ": " + logThis.Value;
+            this.Dispatcher.Invoke( new UpdateLogTextDelegate(UpdateLogText), line);
+        }
+        #endregion
     }
 }

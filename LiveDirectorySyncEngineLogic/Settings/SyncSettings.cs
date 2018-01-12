@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiveDirectorySyncEngineLogic.Generic.Log;
+using System;
 
 namespace LiveDirectorySyncEngineLogic.Settings
 {
@@ -9,11 +10,13 @@ namespace LiveDirectorySyncEngineLogic.Settings
         public string SourcePath { get; set; }
 
         public string TargetPath { get; set; }
+        public EnumLogLevel LogLevel { get; set; }
 
-        public SyncSettings(string sourcePath, string targetPath)
+        public SyncSettings(string sourcePath, string targetPath, EnumLogLevel logLevel )
         {
             SourcePath = sourcePath;
             TargetPath = targetPath;
+            LogLevel = logLevel;
         }
         
         public SyncSettings()

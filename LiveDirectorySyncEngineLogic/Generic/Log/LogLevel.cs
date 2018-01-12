@@ -1,6 +1,6 @@
 ﻿namespace LiveDirectorySyncEngineLogic.Generic.Log
 {
-    public enum LogLevel
+    public enum EnumLogLevel
     {
         None,
         Error,

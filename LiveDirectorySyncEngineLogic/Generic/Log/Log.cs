@@ -7,14 +7,14 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
         private static object _lock = new object();
         private static List<ILogger> _loggers = new List<ILogger>();
 
-        public static LogLevel Level { get; set; }
+        public static EnumLogLevel Level { get; set; }
 
         public static void AddLogger(ILogger logger)
         {
             _loggers.Add(logger);
         }
 
-        private static void DoLog(LogLevel level, string value)
+        private static void DoLog(EnumLogLevel level, string value)
         {
             if (level > Level)
             {
@@ -25,13 +25,13 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
             {
                 switch (level)
                 {
-                    case LogLevel.Error:
+                    case EnumLogLevel.Error:
                         logger.Error(value);
                         break;
-                    case LogLevel.Info:
+                    case EnumLogLevel.Info:
                         logger.Info(value);
                         break;
-                    case LogLevel.Debug:
+                    case EnumLogLevel.Debug:
                         logger.Debug(value);
                         break;
                 }
@@ -40,17 +40,17 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
 
         public static void Error(string value)
         {
-            DoLog(LogLevel.Error, value);
+            DoLog(EnumLogLevel.Error, value);
         }
 
         public static void Info(string value)
         {
-            DoLog(LogLevel.Info, value);
+            DoLog(EnumLogLevel.Info, value);
         }
 
         public static void Debug(string value)
         {
-            DoLog(LogLevel.Debug, value);
+            DoLog(EnumLogLevel.Debug, value);
         }
     }
 }

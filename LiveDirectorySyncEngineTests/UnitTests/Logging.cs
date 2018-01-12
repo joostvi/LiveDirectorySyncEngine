@@ -13,7 +13,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             //setup
             Mock<ILogger> logger = new Mock<ILogger>();
             Log.AddLogger(logger.Object);
-            Log.Level = LogLevel.Error;
+            Log.Level = EnumLogLevel.Error;
 
             //act
             string logText = "Some error info to log";
@@ -29,7 +29,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             //setup
             Mock<ILogger> logger = new Mock<ILogger>();
             Log.AddLogger(logger.Object);
-            Log.Level = LogLevel.Info;
+            Log.Level = EnumLogLevel.Info;
 
             //act
             string logText = "Some error info to log";
@@ -45,7 +45,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             //setup
             Mock<ILogger> logger = new Mock<ILogger>();
             Log.AddLogger(logger.Object);
-            Log.Level = LogLevel.Debug;
+            Log.Level = EnumLogLevel.Debug;
 
             //act
             string logText = "Some error info to log";
@@ -63,7 +63,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             Log.AddLogger(logger1.Object);
             Mock<ILogger> logger2 = new Mock<ILogger>();
             Log.AddLogger(logger2.Object);
-            Log.Level = LogLevel.Debug;
+            Log.Level = EnumLogLevel.Debug;
 
             //act
             string logText = "Some error info to log";
@@ -80,7 +80,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             //setup
             Mock<ILogger> logger = new Mock<ILogger>();
             Log.AddLogger(logger.Object);
-            Log.Level = LogLevel.Info;
+            Log.Level = EnumLogLevel.Info;
 
             //act
             string logText = "Some error info to log";
@@ -96,7 +96,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             //setup
             Mock<ILogger> logger = new Mock<ILogger>();
             Log.AddLogger(logger.Object);
-            Log.Level = LogLevel.Info;
+            Log.Level = EnumLogLevel.Info;
 
             //act
             string logText = "Some error info to log";
