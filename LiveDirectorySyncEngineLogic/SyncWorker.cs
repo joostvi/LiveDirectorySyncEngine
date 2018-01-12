@@ -3,6 +3,7 @@ using LiveDirectorySyncEngineLogic.Settings;
 using System;
 using System.IO;
 using LiveDirectorySyncEngineLogic.Generic;
+using LiveDirectorySyncEngineLogic.Generic.Log;
 
 namespace LiveDirectorySyncEngineLogic
 {
@@ -11,19 +12,17 @@ namespace LiveDirectorySyncEngineLogic
     /// This is in a seperate class to make it usable in the service and also in the sync logic application 
     /// which will be used for testing + also for setting up the settings.
     /// </summary>
-    public class RealtimeSyncWorker
+    public class SyncWorker
     {
         private SyncSettings _Settings;
         private FileSystemWatcher _watcher;
         private ISyncAction _syncAction;
-        private ISyncSettingsRepository _syncSettingsRepository;
         private IFileSystem _FileSystem;
 
-        public RealtimeSyncWorker()
+        public SyncWorker(SyncSettings settings, ISyncAction syncAction)
         {
-            _syncSettingsRepository = Container.GetSyncSettingsRepository();
-            _Settings = _syncSettingsRepository.Load();
-            _syncAction = Container.GetRealtimeNoneCacheSyncActionHandler(_Settings);
+            _Settings = settings;
+            _syncAction = syncAction;
             _FileSystem = Container.GetFileSystem();
         }
 
@@ -32,12 +31,14 @@ namespace LiveDirectorySyncEngineLogic
             if (_watcher != null)
             {
                 throw new InvalidOperationException("Worker already started? Please stop first.");
-            }            
+            }
+            Log.Info("RealtimeSyncWorker started.");
             Watch();
         }
 
         public void Stop()
         {
+            Log.Info("RealtimeSyncWorker stopped.");
             _watcher.Dispose();
             _watcher = null;
         }
@@ -67,17 +68,20 @@ namespace LiveDirectorySyncEngineLogic
             SyncRenameActionCommand command = new SyncRenameActionCommand();
             command.OldFileName = e.OldName;
             command.NewFileName = e.Name;
+            Log.Info($"RealtimeSyncWorker rename of {e.OldName} to {e.Name}.");
             _syncAction.Rename(command);
         }
 
         public void OnDeleted(object sender, FileSystemEventArgs e)
         {
+            Log.Info($"RealtimeSyncWorker delete of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             _syncAction.Delete(new SyncDeleteActionCommand() { SourceFile = syncFileInfo });
         }
 
         public void OnChanged(object source, FileSystemEventArgs e)
         {
+            Log.Info($"RealtimeSyncWorker change of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             //not interested in update of folders as we check the folder content.
             if (_FileSystem.IsDirectory(e.FullPath)) return;
@@ -86,6 +90,7 @@ namespace LiveDirectorySyncEngineLogic
 
         public void OnCreate(object source, FileSystemEventArgs e)
         {
+            Log.Info($"RealtimeSyncWorker creation of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             _syncAction.Create(new SyncCreateActionCommand() { SourceFile = syncFileInfo });
         }

@@ -18,7 +18,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
 
         private RealtimeNoneCachedSyncActionHandler GetHandler(IFileSystem fileSystem)
         {
-            SyncSettings setings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath);
+            SyncSettings setings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info);
             return new RealtimeNoneCachedSyncActionHandler(setings, fileSystem);
         }
 
