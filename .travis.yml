@@ -2,4 +2,3 @@ language: csharp
 dist: trusty  
 script:  
  - msbuild /t:restore /p:Configuration=Release LiveDirectorySyncEngine.sln
- - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./LiveDirectorySyncEngineTests/bin/Release/LiveDirectorySyncEngine\LiveDirectorySyncEngineTests.dll
