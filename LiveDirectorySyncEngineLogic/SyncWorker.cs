@@ -14,33 +14,39 @@ namespace LiveDirectorySyncEngineLogic
     /// </summary>
     public class SyncWorker
     {
-        private SyncSettings _Settings;
+        private readonly SyncSettings _Settings;
         private FileSystemWatcher _watcher;
-        private ISyncAction _syncAction;
-        private IFileSystem _FileSystem;
+        private readonly ISyncActionHandler _syncActionHandlere;
+        private readonly IFileSystem _FileSystem;
 
-        public SyncWorker(SyncSettings settings, ISyncAction syncAction)
+        public SyncWorker(SyncSettings settings, ISyncActionHandler syncActionHandlere, IFileSystem fileSystem)
         {
             _Settings = settings;
-            _syncAction = syncAction;
-            _FileSystem = Container.GetFileSystem();
+            _syncActionHandlere = syncActionHandlere;
+            _FileSystem = fileSystem;
         }
 
         public void Start()
         {
-            if (_watcher != null)
-            {
-                throw new InvalidOperationException("Worker already started? Please stop first.");
-            }
-            Log.Info("RealtimeSyncWorker started.");
+            CanStart();
+            Log.Info("SyncWorker started.");
             Watch();
         }
 
         public void Stop()
         {
-            Log.Info("RealtimeSyncWorker stopped.");
+            Log.Info("SyncWorker stopped.");
             _watcher.Dispose();
             _watcher = null;
+        }
+
+        private void CanStart()
+        {
+            if (_watcher != null)
+            {
+                throw new InvalidOperationException("Worker already started? Please stop first.");
+            }
+            _syncActionHandlere.CanStart();
         }
 
         private void Watch()
@@ -54,13 +60,8 @@ namespace LiveDirectorySyncEngineLogic
             _watcher.Changed += new FileSystemEventHandler(OnChanged);
             _watcher.Deleted += new FileSystemEventHandler(OnDeleted);
             _watcher.Renamed += new RenamedEventHandler(OnRenamed);
-            _watcher.EnableRaisingEvents = true;     
-            
-        }
+            _watcher.EnableRaisingEvents = true;
 
-        private string AddTargetPath(string filename)
-        {
-            return _Settings.TargetPath + "\\" + filename;
         }
 
         public void OnRenamed(object sender, RenamedEventArgs e)
@@ -68,31 +69,32 @@ namespace LiveDirectorySyncEngineLogic
             SyncRenameActionCommand command = new SyncRenameActionCommand();
             command.OldFileName = e.OldName;
             command.NewFileName = e.Name;
-            Log.Info($"RealtimeSyncWorker rename of {e.OldName} to {e.Name}.");
-            _syncAction.Rename(command);
+            Log.Info($"SyncWorker rename of {e.OldName} to {e.Name}.");
+            _syncActionHandlere.Rename(command);
         }
 
         public void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            Log.Info($"RealtimeSyncWorker delete of {e.FullPath}.");
+            Log.Info($"SyncWorker delete of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
-            _syncAction.Delete(new SyncDeleteActionCommand() { SourceFile = syncFileInfo });
+            _syncActionHandlere.Delete(new SyncDeleteActionCommand() { SourceFile = syncFileInfo });
         }
 
         public void OnChanged(object source, FileSystemEventArgs e)
         {
-            Log.Info($"RealtimeSyncWorker change of {e.FullPath}.");
+            Log.Info($"SyncWorker change of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             //not interested in update of folders as we check the folder content.
             if (_FileSystem.IsDirectory(e.FullPath)) return;
-            _syncAction.Update(new SyncUpdateActionCommand() { SourceFile = syncFileInfo });
+            _syncActionHandlere.Update(new SyncUpdateActionCommand() { SourceFile = syncFileInfo });
+
         }
 
         public void OnCreate(object source, FileSystemEventArgs e)
         {
-            Log.Info($"RealtimeSyncWorker creation of {e.FullPath}.");
+            Log.Info($"SyncWorker creation of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
-            _syncAction.Create(new SyncCreateActionCommand() { SourceFile = syncFileInfo });
+            _syncActionHandlere.Create(new SyncCreateActionCommand() { SourceFile = syncFileInfo });
         }
     }
 }

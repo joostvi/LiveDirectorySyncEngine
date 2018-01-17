@@ -11,7 +11,7 @@ namespace LiveDirectorySyncEngineLogic
             return new SyncSettingsRepository();
         }
 
-        public static ISyncAction GetRealtimeNoneCacheSyncActionHandler(SyncSettings settings)
+        public static ISyncActionHandler GetRealtimeNoneCacheSyncActionHandler(SyncSettings settings)
         {
             return new RealtimeNoneCachedSyncActionHandler(settings, GetFileSystem());
         }

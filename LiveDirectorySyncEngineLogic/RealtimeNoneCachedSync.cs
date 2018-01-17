@@ -2,13 +2,15 @@
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using LiveDirectorySyncEngineLogic.Settings;
 using System.IO;
+using System;
+using LiveDirectorySyncEngineLogic.Generic.Log;
 
 namespace LiveDirectorySyncEngineLogic
 {
-    public class RealtimeNoneCachedSyncActionHandler : ISyncAction
+    public class RealtimeNoneCachedSyncActionHandler : ISyncActionHandler
     {
-        private SyncSettings _Settings;
-        private IFileSystem _FileSystem;
+        private readonly SyncSettings _Settings;
+        private readonly IFileSystem _FileSystem;
 
         public RealtimeNoneCachedSyncActionHandler(SyncSettings settings, IFileSystem fileSystem)
         {
@@ -31,50 +33,75 @@ namespace LiveDirectorySyncEngineLogic
             return ConcatPathAndFile(_Settings.SourcePath, filename);
         }
 
+        private void DoAction(string actionName, Action action)
+        {
+            try
+            {
+                action.Invoke();
+            }
+            catch (IOException ex)
+            {
+                //we accept io exceptions. Just log them.
+                Log.Error($"RealtimeNoneCachedSyncActionHandler.{actionName}: {ex.GetType()}: {ex.Message}");
+            }
+        }
+
         public void Rename(SyncRenameActionCommand command)
         {
-            string oldName = AddTargetPath(command.OldFileName);
-            string newName = AddTargetPath(command.NewFileName);
-            if (!ExistsFileOrFolder(oldName))
+            Action action = new Action(() =>
             {
-                //oeps stuff not in sync we need to repair
-                Create(AddSourcePath(command.NewFileName), newName);
-                return;
-            }
-            if (_FileSystem.IsDirectory(oldName))
-            {
-                _FileSystem.Directory.Move(oldName, newName);
-                return;
-            }
-            _FileSystem.File.Move(oldName, newName);
+                string oldName = AddTargetPath(command.OldFileName);
+                string newName = AddTargetPath(command.NewFileName);
+                if (!ExistsFileOrFolder(oldName))
+                {
+                    //oeps stuff not in sync we need to repair
+                    Create(AddSourcePath(command.NewFileName), newName);
+                    return;
+                }
+                if (_FileSystem.IsDirectory(oldName))
+                {
+                    _FileSystem.Directory.Move(oldName, newName);
+                    return;
+                }
+                _FileSystem.File.Move(oldName, newName);
+            });
+            DoAction("Rename", action);
         }
 
         public void Delete(SyncDeleteActionCommand command)
         {
-            string aFile = command.SourceFile.FullPath;
-            string aTarget = aFile.Replace(_Settings.SourcePath, _Settings.TargetPath);
-            if (!ExistsFileOrFolder(aTarget)) return;
-
-            if (_FileSystem.IsDirectory(aTarget))
+            Action action = new Action(() =>
             {
-                _FileSystem.Directory.Delete(aTarget, true);
-                return;
-            }
-            _FileSystem.File.Delete(aTarget);
+                string aFile = command.SourceFile.FullPath;
+                string aTarget = aFile.Replace(_Settings.SourcePath, _Settings.TargetPath);
+                if (!ExistsFileOrFolder(aTarget)) return;
+
+                if (_FileSystem.IsDirectory(aTarget))
+                {
+                    _FileSystem.Directory.Delete(aTarget, true);
+                    return;
+                }
+                _FileSystem.File.Delete(aTarget);
+            });
+            DoAction("Delete", action);
         }
 
         public void Update(SyncUpdateActionCommand command)
         {
-            //Copies file to another directory.
-            string aFile = command.SourceFile.FullPath;
-            string aTarget = aFile.Replace(_Settings.SourcePath, _Settings.TargetPath);
-            if (!ExistsFileOrFolder(aTarget))
+            Action action = new Action(() =>
             {
-                //oeps stuff not in sync we need to repair
-                Create(aFile, aTarget);
-                return;
-            }
-            CopyFile(aFile, aTarget);
+                    //Copies file to another directory.
+                    string aFile = command.SourceFile.FullPath;
+                string aTarget = aFile.Replace(_Settings.SourcePath, _Settings.TargetPath);
+                if (!ExistsFileOrFolder(aTarget))
+                {
+                        //oeps stuff not in sync we need to repair
+                        Create(aFile, aTarget);
+                    return;
+                }
+                CopyFile(aFile, aTarget);
+            });
+            DoAction("Update", action);
         }
 
         private void CopyFile(string aFile, string aTarget)
@@ -91,11 +118,15 @@ namespace LiveDirectorySyncEngineLogic
 
         public void Create(SyncCreateActionCommand command)
         {
-            //Copies file to another directory.
-            string aSource = command.SourceFile.FullPath;
+            Action action = new Action(() =>
+            {
+                        //Copies file to another directory.
+                        string aSource = command.SourceFile.FullPath;
 
-            string aTarget = aSource.Replace(_Settings.SourcePath, _Settings.TargetPath);
-            Create(aSource, aTarget);
+                string aTarget = aSource.Replace(_Settings.SourcePath, _Settings.TargetPath);
+                Create(aSource, aTarget);
+            });
+            DoAction("Create", action);
         }
 
         private void Create(string aSource, string aTarget)
@@ -122,6 +153,19 @@ namespace LiveDirectorySyncEngineLogic
         private bool ExistsFileOrFolder(string fileOrFolder)
         {
             return _FileSystem.File.Exists(fileOrFolder) || _FileSystem.Directory.Exists(fileOrFolder);
+        }
+
+        public void CanStart()
+        {
+            if (!_FileSystem.Directory.Exists(_Settings.SourcePath))
+            {
+                throw new InvalidInputException($"Source path ({_Settings.SourcePath}) does not exist!");
+            }
+            //TODO reconsider this when implementing async.
+            if (!_FileSystem.Directory.Exists(_Settings.TargetPath))
+            {
+                throw new InvalidInputException($"Target path ({_Settings.TargetPath}) does not exist!");
+            }
         }
     }
 }

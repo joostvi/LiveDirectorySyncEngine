@@ -9,7 +9,9 @@ namespace LiveDirectorySyncEngineTests.Mocks
 {
     public class DirectoryMock : IDirectory
     {
-        public IList<string> Directories = new List<string>();
+        private readonly IList<string> directories = new List<string>();
+
+        public IList<string> Directories => directories;
 
         public void Create(string path)
         {

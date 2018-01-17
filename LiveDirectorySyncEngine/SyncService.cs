@@ -1,4 +1,5 @@
-﻿using System.ServiceProcess;
+﻿using System;
+using System.ServiceProcess;
 using LiveDirectorySyncEngineLogic;
 using LiveDirectorySyncEngineLogic.Generic.Log;
 using LiveDirectorySyncEngineLogic.Settings;
@@ -21,14 +22,30 @@ namespace LiveDirectorySyncEngine
             //TODO implement async ISyncAction implementation with off line handling.
             ISyncSettingsRepository syncSettingsRepository = LiveDirectorySyncEngineLogic.Container.GetSyncSettingsRepository();
             SyncSettings settings = syncSettingsRepository.Load();
-            worker = new SyncWorker(settings, LiveDirectorySyncEngineLogic.Container.GetRealtimeNoneCacheSyncActionHandler(settings));
-            worker.Start();
+            worker = new SyncWorker(settings, LiveDirectorySyncEngineLogic.Container.GetRealtimeNoneCacheSyncActionHandler(settings), LiveDirectorySyncEngineLogic.Container.GetFileSystem());
+            try
+            {
+                worker.Start();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to start the sync service", ex);
+                this.Stop();
+            }            
         }
 
         protected override void OnStop()
         {
-            worker.Stop();
-            Log.Info("SyncService stopped");
+            try
+            {
+                worker.Stop();
+                Log.Info("SyncService stopped");
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Exception while stopping the service", ex);
+            }
+            
         }        
     }
 }

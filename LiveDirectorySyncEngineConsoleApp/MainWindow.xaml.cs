@@ -36,15 +36,30 @@ namespace LiveDirectorySyncEngineConsoleApp
         private void BtnRunSyncApp_Click(object sender, RoutedEventArgs e)
         {
             SyncSettings settings = GetSettings();
-            _Worker = new SyncWorker(settings, Container.GetRealtimeNoneCacheSyncActionHandler(settings));
-            _Worker.Start();
-            btnRunSyncApp.IsEnabled = false;
-            btnStopSyncApp.IsEnabled = true;
+            _Worker = new SyncWorker(settings, Container.GetRealtimeNoneCacheSyncActionHandler(settings),Container.GetFileSystem());
+
+            try
+            {
+                _Worker.Start();
+                btnRunSyncApp.IsEnabled = false;
+                btnStopSyncApp.IsEnabled = true;
+            }
+            catch(InvalidInputException ex)
+            {
+                Log.Error("Failed to start sync: ", ex);
+                MessageBox.Show(ex.Message);
+                EnableSyncStart();
+            }
         }
 
         private void BtnStopSyncApp_Click(object sender, RoutedEventArgs e)
         {
             _Worker.Stop();
+            EnableSyncStart();
+        }
+
+        private void EnableSyncStart()
+        {
             btnRunSyncApp.IsEnabled = true;
             btnStopSyncApp.IsEnabled = false;
         }
@@ -58,7 +73,16 @@ namespace LiveDirectorySyncEngineConsoleApp
         {
             ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
             SyncSettings syncSetting = GetSettings();
-            syncSettingsRepository.Save(syncSetting);
+            SettingsValidator validator = new SettingsValidator(Container.GetFileSystem().Directory);
+            try
+            {
+                validator.IsValid(syncSetting);
+                syncSettingsRepository.Save(syncSetting);
+            }
+            catch(InvalidInputException inpEx)
+            {
+                MessageBox.Show(inpEx.Message, "Invalid input");
+            }            
         }
 
         #region logging

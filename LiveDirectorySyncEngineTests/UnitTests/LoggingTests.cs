@@ -5,7 +5,7 @@ using Moq;
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
     [TestClass]
-    public class Logging
+    public class LoggingTests
     {
         [TestMethod]
         public void Log_Error_Test()

@@ -7,8 +7,11 @@ namespace LiveDirectorySyncEngineTests.Mocks
 {
     public class FileMock : IFile
     {
-        public IList<string> Files = new List<string>();
-        private DirectoryMock _Directory;
+        private readonly IList<string> files = new List<string>();
+
+        private readonly DirectoryMock _Directory;
+
+        public IList<string> Files { get => files;  }
 
         public FileMock(DirectoryMock directory)
         {
