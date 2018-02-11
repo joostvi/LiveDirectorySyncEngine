@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="NDatabase3">
+      <HintPath>..\..\NDatabase\src\bin\Debug\NDatabase3.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

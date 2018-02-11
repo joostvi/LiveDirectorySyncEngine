@@ -1,4 +1,5 @@
-﻿using LiveDirectorySyncEngineLogic.Settings;
+﻿using LiveDirectorySyncEngineLogic;
+using LiveDirectorySyncEngineLogic.Settings;
 using System;
 using System.Text;
 using System.Windows;
@@ -16,6 +17,7 @@ namespace LiveDirectorySyncEngineConsoleApp
         {
 
             AddExceptionHandlerNoneUIThread();
+            Container.Setup();
             // Create the startup window
             MainWindow wnd = new MainWindow();
             // Show the window

@@ -1,0 +1,38 @@
+<<<<<<< HEAD
+﻿using NDatabase;
+using NDatabase.Api;
+using LiveDirectorySyncEngineLogic.Generic.Model;
+=======
+﻿using LiveDirectorySyncEngineLogic.Generic.Model;
+>>>>>>> NDatabase fase 1
+using System;
+using System.Collections.Generic;
+
+namespace LiveDirectorySyncEngineLogic.Generic.DataAccess
+{
+    public interface IDBConnection : IDisposable
+    {
+        string ConnectionString { get; }
+<<<<<<< HEAD
+        void Close();
+        void Open();
+=======
+        void Open();
+        void Close();
+>>>>>>> NDatabase fase 1
+
+        void Store<T>(T obj) where T : class;
+        IList<T> GetAll<T>() where T : class;
+        T Get<T>(int id) where T : class, IIdentifier;
+<<<<<<< HEAD
+    }
+
+    public interface IDBRepository
+    {
+        void Store<T>(T obj) where T : class;
+        IList<T> GetAll<T>() where T : class;
+        T Get<T>(int id) where T : class, IIdentifier;
+=======
+>>>>>>> NDatabase fase 1
+    }
+}

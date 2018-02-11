@@ -62,11 +62,12 @@
     <Compile Include="Mocks\FileMock.cs" />
     <Compile Include="Mocks\FileSystemMock.cs" />
     <Compile Include="Mocks\FileSystemMockHelper.cs" />
-    <Compile Include="UnitTests\RealtimeNoneCacheSyncActionHandlerTests.cs" />
+    <Compile Include="UnitTests\Generic\BaseRepostoryTests.cs" />
     <Compile Include="UnitTests\Generic\LoggingTests.cs" />
+    <Compile Include="UnitTests\SyncEngine\RealtimeNoneCacheSyncActionHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTests\SettingsValidatorTests.cs" />
-    <Compile Include="UnitTests\SyncWorkerTests.cs" />
+    <Compile Include="UnitTests\SyncEngine\SettingsValidatorTests.cs" />
+    <Compile Include="UnitTests\SyncEngine\SyncWorkerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

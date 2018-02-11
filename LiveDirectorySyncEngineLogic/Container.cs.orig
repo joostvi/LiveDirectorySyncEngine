@@ -1,18 +1,24 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic;
+<<<<<<< HEAD
+using LiveDirectorySyncEngineLogic.Generic.DataAccess;
+=======
 using LiveDirectorySyncEngineLogic.Generic.DataAccess.NDatabaseImplementation;
+>>>>>>> NDatabase fase 1
 using LiveDirectorySyncEngineLogic.Generic.DataAccess.FileSystem;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using NDatabase.Api;
 using System;
-using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 
 namespace LiveDirectorySyncEngineLogic
 {
     public static class Container
     {
+<<<<<<< HEAD
+=======
         private const bool _useNDatabase = true;
 
+>>>>>>> NDatabase fase 1
         public static ISyncSettingsRepository GetSyncSettingsRepository(IDBConnection dBConnection)
         {
             return new SyncSettingsRepository(dBConnection);
@@ -41,6 +47,8 @@ namespace LiveDirectorySyncEngineLogic
 
         public static IDBConnection GetDBConnection()
         {
+<<<<<<< HEAD
+=======
            
             //TODO: file location as setting.
 
@@ -51,6 +59,7 @@ namespace LiveDirectorySyncEngineLogic
                 return new NDatabaseConnection(database);
             }
 
+>>>>>>> NDatabase fase 1
             //File store implementations
             string dir = "path=" + AppDomain.CurrentDomain.BaseDirectory;
             return new FileStoreConnection(dir);
