@@ -6,7 +6,7 @@ namespace LiveDirectorySyncEngineLogic.Settings
     public class SyncSettingsRepository : ISyncSettingsRepository
     {
 
-        private string dir = AppDomain.CurrentDomain.BaseDirectory;
+        private readonly string dir = AppDomain.CurrentDomain.BaseDirectory;
 
         public void Save(SyncSettings syncSetting)
         {

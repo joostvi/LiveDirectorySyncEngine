@@ -4,6 +4,7 @@ using System.Windows;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.Generic.Log;
 using LiveDirectorySyncEngineConsoleApp.Logging;
+using System.Collections.Generic;
 
 namespace LiveDirectorySyncEngineConsoleApp
 {
@@ -14,7 +15,7 @@ namespace LiveDirectorySyncEngineConsoleApp
     {
 
         private SyncWorker _Worker;
-        private SyncSettings _Settings;
+        private BindingContext _bindingContext;
 
         public MainWindow()
         {
@@ -26,18 +27,28 @@ namespace LiveDirectorySyncEngineConsoleApp
         private void LoadSettings()
         {
             ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
-            _Settings = syncSettingsRepository.Load();
-            this.DataContext = _Settings;
+            SyncSettings settings = syncSettingsRepository.Load();
+            _bindingContext = new BindingContext(settings);
+            this.DataContext = _bindingContext;
 
-
-            Log.Level = EnumLogLevel.Info;  //TODO Make optional
-            Log.AddLogger(new ScreenLogger(AddLog));
+            ResetLoggers(settings);
             Log.Info("Started application");
+        }
+
+        private void ResetLoggers(SyncSettings settings)
+        {
+            Log.RemoveAll();
+            Log.Level = settings.LogLevel;
+            Log.AddLogger(new ScreenLogger(AddLog));
+            if (settings.LogPath?.Length > 0)
+            {
+                Log.AddLogger(new FileLogger(settings.LogPath, "DirectorySync"));
+            }
         }
 
         private void BtnRunSyncApp_Click(object sender, RoutedEventArgs e)
         {
-            _Worker = new SyncWorker(_Settings, Container.GetRealtimeNoneCacheSyncActionHandler(_Settings), Container.GetFileSystem());
+            _Worker = new SyncWorker(_bindingContext.Settings, Container.GetRealtimeNoneCacheSyncActionHandler(_bindingContext.Settings), Container.GetFileSystem());
 
             try
             {
@@ -71,8 +82,10 @@ namespace LiveDirectorySyncEngineConsoleApp
             SettingsValidator validator = new SettingsValidator(Container.GetFileSystem().Directory);
             try
             {
-                validator.IsValid(_Settings);
-                syncSettingsRepository.Save(_Settings);
+                
+                validator.IsValid(_bindingContext.Settings);
+                syncSettingsRepository.Save(_bindingContext.Settings);
+                ResetLoggers(_bindingContext.Settings);
             }
             catch (InvalidInputException inpEx)
             {
@@ -95,5 +108,35 @@ namespace LiveDirectorySyncEngineConsoleApp
             this.Dispatcher.Invoke(new UpdateLogTextDelegate(UpdateLogText), line);
         }
         #endregion
+    }
+
+    public class LogLevel
+    {
+        public EnumLogLevel Level { get; }
+        public string Description => Level.ToString();
+
+        public LogLevel(EnumLogLevel level)
+        {
+            Level = level;
+        }
+    }
+
+    public class BindingContext
+    {
+        private readonly SyncSettings _settings;
+        public List<LogLevel> LogLevels { get; }
+        public SyncSettings Settings => _settings;
+
+        public BindingContext(SyncSettings settings)
+        {
+            _settings = settings;
+
+            LogLevels = new List<LogLevel>();
+            Array valuesAsArray = Enum.GetValues(typeof(EnumLogLevel));
+            foreach(int value in valuesAsArray)
+            {
+                LogLevels.Add(new LogLevel((EnumLogLevel)value));
+            }
+        }
     }
 }

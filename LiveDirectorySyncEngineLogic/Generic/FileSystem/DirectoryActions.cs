@@ -14,9 +14,9 @@ namespace LiveDirectorySyncEngineLogic.Generic
             Directory.Delete(path, recursive);
         }
 
-        public void Create(string Path)
+        public void Create(string path)
         {
-            Directory.CreateDirectory(Path);
+            Directory.CreateDirectory(path);
         }
 
         public bool Exists(string path)

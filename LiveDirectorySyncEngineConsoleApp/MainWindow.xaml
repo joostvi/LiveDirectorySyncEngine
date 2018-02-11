@@ -22,13 +22,19 @@
             </TabItem>
             <TabItem Header="Settings" VerticalAlignment="Stretch">
                 <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0">
-                    <Button x:Name="Save" Content="Save" HorizontalAlignment="Left" Margin="332,95,0,0" VerticalAlignment="Top" Width="75" Click="Save_Click"/>
+                    <Button x:Name="Save" Content="Save" HorizontalAlignment="Left" Margin="327,175,0,0" VerticalAlignment="Top" Width="75" Click="Save_Click"/>
                     <Label x:Name="LblSource" Content="Source:" HorizontalAlignment="Left" Height="25" Margin="14,26,0,0" VerticalAlignment="Top" Width="78" RenderTransformOrigin="0.5,0.5">
 
                     </Label>
-                    <Label x:Name="LblTarget" Content="Target:" HorizontalAlignment="Left" Height="25" Margin="17,61,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.5,0.5"/>
-                    <TextBox x:Name="Source" Text = "{Binding SourcePath, Mode = TwoWay}" HorizontalAlignment="Left" Height="23" Margin="97,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
-                    <TextBox x:Name="Target" Text = "{Binding TargetPath, Mode = TwoWay}" HorizontalAlignment="Left" Height="23" Margin="97,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
+                    <Label x:Name="LblTarget" Content="Target:" HorizontalAlignment="Left" Height="25" Margin="14,61,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBox x:Name="Source" Text = "{Binding Settings.SourcePath, Mode = TwoWay}" HorizontalAlignment="Left" Height="23" Margin="97,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
+                    <TextBox x:Name="Target" Text = "{Binding Settings.TargetPath, Mode = TwoWay}" HorizontalAlignment="Left" Height="23" Margin="97,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
+                    <Label x:Name="LblLogLevel" Content="Log level:" HorizontalAlignment="Left" Height="25" Margin="14,100,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.5,0.5"/>
+                    <ComboBox x:Name="LogLevel" ItemsSource="{Binding Path=LogLevels}" 
+                       DisplayMemberPath="Description" 
+                       SelectedValuePath="Level" HorizontalAlignment="Left" Margin="97,98,0,0" VerticalAlignment="Top" Width="310" SelectedValue="{Binding Settings.LogLevel, Mode = TwoWay}"/>
+                    <Label x:Name="LblLogPath" Content="Log path:" HorizontalAlignment="Left" Height="25" Margin="17,135,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBox x:Name="LogPath" Text = "{Binding Settings.LogPath, Mode=TwoWay}" HorizontalAlignment="Left" Height="23" Margin="97,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Log" VerticalAlignment="Stretch">

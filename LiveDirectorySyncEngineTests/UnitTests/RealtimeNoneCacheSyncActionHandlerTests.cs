@@ -15,10 +15,11 @@ namespace LiveDirectorySyncEngineTests.UnitTests
     {
         private const string _DefaultSourcePath = @"c:\source\";
         private const string _DefaultTargetPath = @"c:\target\";
+        private const string _DefaultLogPath = @"c:\log\";
 
         private RealtimeNoneCachedSyncActionHandler GetHandler(IFileSystem fileSystem)
         {
-            SyncSettings setings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info);
+            SyncSettings setings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info, _DefaultLogPath);
             return new RealtimeNoneCachedSyncActionHandler(setings, fileSystem);
         }
 

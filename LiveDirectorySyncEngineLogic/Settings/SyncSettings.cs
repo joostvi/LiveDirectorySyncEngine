@@ -11,18 +11,22 @@ namespace LiveDirectorySyncEngineLogic.Settings
 
         public string TargetPath { get; set; }
         public EnumLogLevel LogLevel { get; set; }
+        public string LogPath { get; set; }
 
-        public SyncSettings(string sourcePath, string targetPath, EnumLogLevel logLevel )
+        public SyncSettings(string sourcePath, string targetPath, EnumLogLevel logLevel, string logPath )
         {
             SourcePath = sourcePath;
             TargetPath = targetPath;
             LogLevel = logLevel;
+            LogPath = logPath;
         }
         
         public SyncSettings()
         {
             SourcePath = @"C:\tmp\TestSource";
             TargetPath = @"C:\tmp\TestTarget";
+            LogLevel = EnumLogLevel.Info;
+            LogPath = @"c:\tmp";
         }
     }
 }

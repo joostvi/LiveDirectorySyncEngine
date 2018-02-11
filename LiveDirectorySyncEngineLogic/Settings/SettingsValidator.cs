@@ -1,7 +1,4 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LiveDirectorySyncEngineLogic.Settings
 {
@@ -24,6 +21,11 @@ namespace LiveDirectorySyncEngineLogic.Settings
             if (!_directory.Exists(settings.TargetPath))
             {
                 throw new InvalidInputException($"Target path ({settings.TargetPath}) does not exist!");
+            }
+
+            if (settings.LogPath?.Length > 0 && !_directory.Exists(settings.LogPath))
+            {
+                throw new InvalidInputException($"LogPath path ({settings.LogPath}) does not exist!");
             }
         }
     }

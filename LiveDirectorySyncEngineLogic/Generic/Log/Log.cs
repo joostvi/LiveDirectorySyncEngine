@@ -12,6 +12,11 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
 
         public static EnumLogLevel Level { get; set; }
 
+        public static void RemoveAll()
+        {
+            _loggers.Clear();
+        }
+
         public static void AddLogger(ILogger logger)
         {
             _loggers.Add(logger);
