@@ -21,7 +21,8 @@ namespace LiveDirectorySyncEngineLogic.Settings
         
         public SyncSettings()
         {
-
+            SourcePath = @"C:\tmp\TestSource";
+            TargetPath = @"C:\tmp\TestTarget";
         }
     }
 }

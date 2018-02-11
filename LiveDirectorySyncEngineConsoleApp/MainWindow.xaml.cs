@@ -14,6 +14,7 @@ namespace LiveDirectorySyncEngineConsoleApp
     {
 
         private SyncWorker _Worker;
+        private SyncSettings _Settings;
 
         public MainWindow()
         {
@@ -25,9 +26,10 @@ namespace LiveDirectorySyncEngineConsoleApp
         private void LoadSettings()
         {
             ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
-            SyncSettings settings = syncSettingsRepository.Load();
-            Source.Text = settings.SourcePath;
-            Target.Text = settings.TargetPath;
+            _Settings = syncSettingsRepository.Load();
+            this.DataContext = _Settings;
+
+
             Log.Level = EnumLogLevel.Info;  //TODO Make optional
             Log.AddLogger(new ScreenLogger(AddLog));
             Log.Info("Started application");
@@ -35,8 +37,7 @@ namespace LiveDirectorySyncEngineConsoleApp
 
         private void BtnRunSyncApp_Click(object sender, RoutedEventArgs e)
         {
-            SyncSettings settings = GetSettings();
-            _Worker = new SyncWorker(settings, Container.GetRealtimeNoneCacheSyncActionHandler(settings),Container.GetFileSystem());
+            _Worker = new SyncWorker(_Settings, Container.GetRealtimeNoneCacheSyncActionHandler(_Settings), Container.GetFileSystem());
 
             try
             {
@@ -44,7 +45,7 @@ namespace LiveDirectorySyncEngineConsoleApp
                 btnRunSyncApp.IsEnabled = false;
                 btnStopSyncApp.IsEnabled = true;
             }
-            catch(InvalidInputException ex)
+            catch (InvalidInputException ex)
             {
                 Log.Error("Failed to start sync: ", ex);
                 MessageBox.Show(ex.Message);
@@ -64,25 +65,19 @@ namespace LiveDirectorySyncEngineConsoleApp
             btnStopSyncApp.IsEnabled = false;
         }
 
-        private SyncSettings GetSettings()
-        {
-            return new SyncSettings(Source.Text, Target.Text, EnumLogLevel.Error);
-        }
-
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
-            SyncSettings syncSetting = GetSettings();
             SettingsValidator validator = new SettingsValidator(Container.GetFileSystem().Directory);
             try
             {
-                validator.IsValid(syncSetting);
-                syncSettingsRepository.Save(syncSetting);
+                validator.IsValid(_Settings);
+                syncSettingsRepository.Save(_Settings);
             }
-            catch(InvalidInputException inpEx)
+            catch (InvalidInputException inpEx)
             {
                 MessageBox.Show(inpEx.Message, "Invalid input");
-            }            
+            }
         }
 
         #region logging
@@ -97,7 +92,7 @@ namespace LiveDirectorySyncEngineConsoleApp
         public void AddLog(object sender, ScreenLogEventArgs logThis)
         {
             string line = "\r\n" + DateTime.Now.ToString() + " " + logThis.Level.ToString() + ": " + logThis.Value;
-            this.Dispatcher.Invoke( new UpdateLogTextDelegate(UpdateLogText), line);
+            this.Dispatcher.Invoke(new UpdateLogTextDelegate(UpdateLogText), line);
         }
         #endregion
     }
