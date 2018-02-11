@@ -4,6 +4,11 @@ https://github.com/Moq/moq4
 Continues integration:
 https://travis-ci.org/
 
+WPF user Controls
+https://www.tutorialspoint.com/wpf/wpf_custom_controls.htm
+https://stackoverflow.com/questions/2087327/wpf-usercontrol-textbox-propertychanged-event-not-firing
+https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/use-automatic-layout-overview
+
 Inspiration:
 https://stackoverflow.com/questions/15017506/using-filesystemwatcher-to-monitor-a-directory
 https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
