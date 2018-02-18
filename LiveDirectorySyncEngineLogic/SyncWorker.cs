@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.Generic.Log;
+using System.Threading;
 
 namespace LiveDirectorySyncEngineLogic
 {
@@ -60,8 +61,15 @@ namespace LiveDirectorySyncEngineLogic
             _watcher.Changed += new FileSystemEventHandler(OnChanged);
             _watcher.Deleted += new FileSystemEventHandler(OnDeleted);
             _watcher.Renamed += new RenamedEventHandler(OnRenamed);
+            _watcher.Error += new ErrorEventHandler(OnError);
             _watcher.EnableRaisingEvents = true;
 
+        }
+
+        public void OnError(object sender, ErrorEventArgs e)
+        {
+            Exception ex = e.GetException();
+            Log.Error($"FileSystem watchers got an Error of type: {ex.GetType()}, Message: {ex.Message}.");
         }
 
         public void OnRenamed(object sender, RenamedEventArgs e)
@@ -83,11 +91,33 @@ namespace LiveDirectorySyncEngineLogic
         public void OnChanged(object source, FileSystemEventArgs e)
         {
             Log.Info($"SyncWorker change of {e.FullPath}.");
-            SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
+            //It appears we get changed while target also is deleted.
+            bool found = false;
+            int attempts = 0;
+            while (!found && attempts < 10)
+            {
+                found = ExistsFileOrFolder(e.FullPath);
+                if (!found)
+                {
+                    Thread.Sleep(500);
+                    attempts += 1;
+                }
+            }
+            if (!found)
+            {
+                Log.Info($"Got file change message for none existing file or folder {e.FullPath}");
+                return;
+            }
             //not interested in update of folders as we check the folder content.
-            if (_FileSystem.IsDirectory(e.FullPath)) return;
-            _syncActionHandlere.Update(new SyncUpdateActionCommand() { SourceFile = syncFileInfo });
 
+            if (_FileSystem.IsDirectory(e.FullPath)) return;
+            SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
+            _syncActionHandlere.Update(new SyncUpdateActionCommand() { SourceFile = syncFileInfo });
+        }
+
+        private bool ExistsFileOrFolder(string fileOrFolder)
+        {
+            return _FileSystem.File.Exists(fileOrFolder) || _FileSystem.Directory.Exists(fileOrFolder);
         }
 
         public void OnCreate(object source, FileSystemEventArgs e)

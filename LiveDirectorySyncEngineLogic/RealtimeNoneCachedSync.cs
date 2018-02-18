@@ -54,6 +54,7 @@ namespace LiveDirectorySyncEngineLogic
                 string newName = AddTargetPath(command.NewFileName);
                 if (!ExistsFileOrFolder(oldName))
                 {
+                    Log.Debug($"LiveDirectorySyncEngineLogic.Rename: Got file rename for file which does not exists try to create it! ({command.NewFileName})");
                     //oeps stuff not in sync we need to repair
                     Create(AddSourcePath(command.NewFileName), newName);
                     return;
@@ -90,13 +91,13 @@ namespace LiveDirectorySyncEngineLogic
         {
             Action action = new Action(() =>
             {
-                    //Copies file to another directory.
-                    string aFile = command.SourceFile.FullPath;
+                //Copies file to another directory.
+                string aFile = command.SourceFile.FullPath;
                 string aTarget = aFile.Replace(_Settings.SourcePath, _Settings.TargetPath);
                 if (!ExistsFileOrFolder(aTarget))
                 {
-                        //oeps stuff not in sync we need to repair
-                        Create(aFile, aTarget);
+                    //oeps stuff not in sync we need to repair
+                    Create(aFile, aTarget);
                     return;
                 }
                 CopyFile(aFile, aTarget);
@@ -110,9 +111,10 @@ namespace LiveDirectorySyncEngineLogic
             {
                 _FileSystem.File.Copy(aFile, aTarget, true);
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException ex)
             {
                 //do nothing assume this is in an async scenario where update is followed by delete. 
+                Log.Error($"Failed to copy file with exception: {ex.Message}");
             }
         }
 
@@ -120,8 +122,8 @@ namespace LiveDirectorySyncEngineLogic
         {
             Action action = new Action(() =>
             {
-                        //Copies file to another directory.
-                        string aSource = command.SourceFile.FullPath;
+                //Copies file to another directory.
+                string aSource = command.SourceFile.FullPath;
 
                 string aTarget = aSource.Replace(_Settings.SourcePath, _Settings.TargetPath);
                 Create(aSource, aTarget);
