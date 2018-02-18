@@ -16,7 +16,7 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
 
         private string GetFileName()
         {
-            return _path + "\\" + _baseFileName + "_" + DateTime.Now.ToString("yyyymmdd") + ".log";
+            return _path + "\\" + _baseFileName + "_" + DateTime.Now.ToString("yyyyMMdd") + ".log";
         }
 
         private void DoLog(string value)
