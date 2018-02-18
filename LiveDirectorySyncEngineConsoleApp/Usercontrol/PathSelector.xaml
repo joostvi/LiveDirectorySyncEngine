@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="txtPath" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="250" Width="Auto" />
+        <TextBox x:Name="txtPath" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" MinWidth="250" Width="Auto" TextChanged="TxtPath_TextChanged" />
         <Button Content="..." Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="30" Click="Button_Click"/>
     </Grid>
 </UserControl>

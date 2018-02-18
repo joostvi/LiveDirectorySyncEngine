@@ -37,5 +37,10 @@ DependencyProperty.Register("Path", typeof(string), typeof(PathSelector), new UI
             get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
         }
+
+        private void TxtPath_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            Path = txtPath.Text;
+        }
     }
 }
