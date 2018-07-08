@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
 using LiveDirectorySyncEngineLogic;
-using LiveDirectorySyncEngineLogic.Generic;
+using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using LiveDirectorySyncEngineLogic.Generic.Log;
 using LiveDirectorySyncEngineLogic.Settings;
 
@@ -21,9 +21,12 @@ namespace LiveDirectorySyncEngine
         {
             Logger.Info("SyncService started");
             //TODO implement async ISyncAction implementation with off line handling.
-            ISyncSettingsRepository syncSettingsRepository = LiveDirectorySyncEngineLogic.Container.GetSyncSettingsRepository();
-            SyncSettings settings = syncSettingsRepository.Load();
-            worker = new SyncWorker(settings, LiveDirectorySyncEngineLogic.Container.GetRealtimeNoneCacheSyncActionHandler(settings), LiveDirectorySyncEngineLogic.Container.GetFileSystem());
+            using (IDBConnection connection = LiveDirectorySyncEngineLogic.Container.GetDBConnection())
+            {
+                ISyncSettingsRepository syncSettingsRepository = LiveDirectorySyncEngineLogic.Container.GetSyncSettingsRepository(connection);
+                SyncSettings settings = syncSettingsRepository.Get(1);
+                worker = new SyncWorker(settings, LiveDirectorySyncEngineLogic.Container.GetRealtimeNoneCacheSyncActionHandler(settings), LiveDirectorySyncEngineLogic.Container.GetFileSystem());
+            }
             try
             {
                 worker.Start();

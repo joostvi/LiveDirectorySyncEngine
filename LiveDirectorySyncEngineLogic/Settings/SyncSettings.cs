@@ -1,11 +1,12 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic.Log;
+using LiveDirectorySyncEngineLogic.Generic.Model;
 using System;
 
 namespace LiveDirectorySyncEngineLogic.Settings
 {
     [Serializable()]
 
-    public class SyncSettings
+    public class SyncSettings : ModelBase
     {
         public string SourcePath { get; set; }
 
@@ -13,7 +14,7 @@ namespace LiveDirectorySyncEngineLogic.Settings
         public EnumLogLevel LogLevel { get; set; }
         public string LogPath { get; set; }
 
-        public SyncSettings(string sourcePath, string targetPath, EnumLogLevel logLevel, string logPath )
+        public SyncSettings(string sourcePath, string targetPath, EnumLogLevel logLevel, string logPath ) : base (1)
         {
             SourcePath = sourcePath;
             TargetPath = targetPath;
@@ -21,7 +22,7 @@ namespace LiveDirectorySyncEngineLogic.Settings
             LogPath = logPath;
         }
         
-        public SyncSettings()
+        public SyncSettings() : base(1)
         {
             SourcePath = @"C:\tmp\TestSource";
             TargetPath = @"C:\tmp\TestTarget";

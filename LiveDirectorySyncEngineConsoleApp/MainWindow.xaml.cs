@@ -5,6 +5,8 @@ using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.Generic.Log;
 using LiveDirectorySyncEngineConsoleApp.Logging;
 using System.Collections.Generic;
+using LiveDirectorySyncEngineLogic.Generic;
+using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 
 namespace LiveDirectorySyncEngineConsoleApp
 {
@@ -26,13 +28,20 @@ namespace LiveDirectorySyncEngineConsoleApp
 
         private void LoadSettings()
         {
-            ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
-            SyncSettings settings = syncSettingsRepository.Load();
-            _bindingContext = new BindingContext(settings);
-            this.DataContext = _bindingContext;
+            using (IDBConnection connection = LiveDirectorySyncEngineLogic.Container.GetDBConnection())
+            {
+                ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository(connection);
+                SyncSettings settings = syncSettingsRepository.Get(1);
+                if(settings == null)
+                {
+                    settings = new SyncSettings();
+                }
+                _bindingContext = new BindingContext(settings);
+                this.DataContext = _bindingContext;
 
-            ResetLoggers(settings);
+                ResetLoggers(settings);
                 Logger.Info("Started application");
+            }          
         }
 
         private void ResetLoggers(SyncSettings settings)
@@ -78,14 +87,18 @@ namespace LiveDirectorySyncEngineConsoleApp
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository();
-            SettingsValidator validator = new SettingsValidator(Container.GetFileSystem().Directory);
+
             try
             {
-                
-                validator.IsValid(_bindingContext.Settings);
-                syncSettingsRepository.Save(_bindingContext.Settings);
-                ResetLoggers(_bindingContext.Settings);
+                using (IDBConnection connection = LiveDirectorySyncEngineLogic.Container.GetDBConnection())
+                {
+                    ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository(connection);
+                    SettingsValidator validator = new SettingsValidator(Container.GetFileSystem().Directory);
+                    validator.IsValid(_bindingContext.Settings);
+                    syncSettingsRepository.Store(_bindingContext.Settings);
+                    ResetLoggers(_bindingContext.Settings);
+                    Logger.Info("Settings stored");
+                }
             }
             catch (InvalidInputException inpEx)
             {

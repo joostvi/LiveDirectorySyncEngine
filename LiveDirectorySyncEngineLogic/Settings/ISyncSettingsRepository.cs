@@ -1,8 +1,8 @@
-﻿namespace LiveDirectorySyncEngineLogic.Settings
+﻿using LiveDirectorySyncEngineLogic.Generic;
+
+namespace LiveDirectorySyncEngineLogic.Settings
 {
-    public interface ISyncSettingsRepository
+    public interface ISyncSettingsRepository : IDBRepository<SyncSettings>
     {
-        SyncSettings Load();
-        void Save(SyncSettings syncSetting);
     }
 }
