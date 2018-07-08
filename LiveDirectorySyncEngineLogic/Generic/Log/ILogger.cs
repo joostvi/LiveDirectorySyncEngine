@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace LiveDirectorySyncEngineLogic.Generic.Log
 {
     public interface ILogger
@@ -9,5 +6,6 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
         void Error(string value);
         void Info(string value);
         void Debug(string value);
+        void Warning(string value);
     }
 }

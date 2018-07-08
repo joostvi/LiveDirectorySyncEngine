@@ -1,10 +1,15 @@
-﻿namespace LiveDirectorySyncEngineLogic.Generic.Log
+﻿using LiveDirectorySyncEngineLogic.Generic.Log;
+
+namespace LiveDirectorySyncEngineLogic.Generic.Log
 {
-    public enum EnumLogLevel
+    public class LogLevel
     {
-        None,
-        Error,
-        Info,
-        Debug
+        public EnumLogLevel Level { get; }
+        public string Description => Level.ToString();
+
+        public LogLevel(EnumLogLevel level)
+        {
+            Level = level;
+        }
     }
 }

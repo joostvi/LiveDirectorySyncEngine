@@ -32,5 +32,10 @@ namespace LiveDirectorySyncEngineConsoleApp.Logging
         {
             DoLog(EnumLogLevel.Info, value);
         }
+
+        public void Warning(string value)
+        {
+            DoLog(EnumLogLevel.Warning, value);
+        }
     }
 }

@@ -48,5 +48,10 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
         {
             DoLog("INFO " + value);
         }
+
+        public void Warning(string value)
+        {
+            DoLog("WARNING " + value);
+        }
     }
 }

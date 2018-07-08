@@ -42,7 +42,7 @@ namespace LiveDirectorySyncEngineLogic
             catch (IOException ex)
             {
                 //we accept io exceptions. Just log them.
-                Log.Error($"RealtimeNoneCachedSyncActionHandler.{actionName}: {ex.GetType()}: {ex.Message}");
+                Logger.Error($"RealtimeNoneCachedSyncActionHandler.{actionName}: {ex.GetType()}: {ex.Message}");
             }
         }
 
@@ -54,7 +54,7 @@ namespace LiveDirectorySyncEngineLogic
                 string newName = AddTargetPath(command.NewFileName);
                 if (!ExistsFileOrFolder(oldName))
                 {
-                    Log.Debug($"LiveDirectorySyncEngineLogic.Rename: Got file rename for file which does not exists try to create it! ({command.NewFileName})");
+                    Logger.Debug($"LiveDirectorySyncEngineLogic.Rename: Got file rename for file which does not exists try to create it! ({command.NewFileName})");
                     //oeps stuff not in sync we need to repair
                     Create(AddSourcePath(command.NewFileName), newName);
                     return;
@@ -114,7 +114,7 @@ namespace LiveDirectorySyncEngineLogic
             catch (FileNotFoundException ex)
             {
                 //do nothing assume this is in an async scenario where update is followed by delete. 
-                Log.Error($"Failed to copy file with exception: {ex.Message}");
+                Logger.Error($"Failed to copy file with exception: {ex.Message}");
             }
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LiveDirectorySyncEngineLogic.Generic.Log
 {
-    public static partial class Log
+    public static partial class Logger
     {
         //TODO decide about locking private static object _lock = new object();
         private static List<ILogger> _loggers = new List<ILogger>();
@@ -42,6 +42,9 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
                     case EnumLogLevel.Debug:
                         logger.Debug(value);
                         break;
+                    case EnumLogLevel.Warning:
+                        logger.Warning(value);
+                        break;
                 }
             }
         }
@@ -77,6 +80,11 @@ namespace LiveDirectorySyncEngineLogic.Generic.Log
                 }
             }
             DoLog(EnumLogLevel.Error, sb.ToString());
+        }
+
+        public static void Warning(string value)
+        {
+            DoLog(EnumLogLevel.Warning, value);
         }
 
         public static void Info(string value)

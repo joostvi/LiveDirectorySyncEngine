@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
 using LiveDirectorySyncEngineLogic;
+using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.Generic.Log;
 using LiveDirectorySyncEngineLogic.Settings;
 
@@ -18,7 +19,7 @@ namespace LiveDirectorySyncEngine
 
         protected override void OnStart(string[] args)
         {
-            Log.Info("SyncService started");
+            Logger.Info("SyncService started");
             //TODO implement async ISyncAction implementation with off line handling.
             ISyncSettingsRepository syncSettingsRepository = LiveDirectorySyncEngineLogic.Container.GetSyncSettingsRepository();
             SyncSettings settings = syncSettingsRepository.Load();
@@ -29,9 +30,9 @@ namespace LiveDirectorySyncEngine
             }
             catch (Exception ex)
             {
-                Log.Error("Failed to start the sync service", ex);
+                Logger.Error("Failed to start the sync service", ex);
                 this.Stop();
-            }            
+            }
         }
 
         protected override void OnStop()
@@ -39,13 +40,13 @@ namespace LiveDirectorySyncEngine
             try
             {
                 worker.Stop();
-                Log.Info("SyncService stopped");
+                Logger.Info("SyncService stopped");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Error("Exception while stopping the service", ex);
+                Logger.Error("Exception while stopping the service", ex);
             }
-            
-        }        
+
+        }
     }
 }

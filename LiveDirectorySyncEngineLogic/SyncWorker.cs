@@ -30,13 +30,13 @@ namespace LiveDirectorySyncEngineLogic
         public void Start()
         {
             CanStart();
-            Log.Info("SyncWorker started.");
+            Logger.Info("SyncWorker started.");
             Watch();
         }
 
         public void Stop()
         {
-            Log.Info("SyncWorker stopped.");
+            Logger.Info("SyncWorker stopped.");
             _watcher.Dispose();
             _watcher = null;
         }
@@ -69,7 +69,7 @@ namespace LiveDirectorySyncEngineLogic
         public void OnError(object sender, ErrorEventArgs e)
         {
             Exception ex = e.GetException();
-            Log.Error($"FileSystem watchers got an Error of type: {ex.GetType()}, Message: {ex.Message}.");
+            Logger.Error($"FileSystem watchers got an Error of type: {ex.GetType()}, Message: {ex.Message}.");
         }
 
         public void OnRenamed(object sender, RenamedEventArgs e)
@@ -77,20 +77,20 @@ namespace LiveDirectorySyncEngineLogic
             SyncRenameActionCommand command = new SyncRenameActionCommand();
             command.OldFileName = e.OldName;
             command.NewFileName = e.Name;
-            Log.Info($"SyncWorker rename of {e.OldName} to {e.Name}.");
+            Logger.Info($"SyncWorker rename of {e.OldName} to {e.Name}.");
             _syncActionHandlere.Rename(command);
         }
 
         public void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            Log.Info($"SyncWorker delete of {e.FullPath}.");
+            Logger.Info($"SyncWorker delete of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             _syncActionHandlere.Delete(new SyncDeleteActionCommand() { SourceFile = syncFileInfo });
         }
 
         public void OnChanged(object source, FileSystemEventArgs e)
         {
-            Log.Info($"SyncWorker change of {e.FullPath}.");
+            Logger.Info($"SyncWorker change of {e.FullPath}.");
             //It appears we get changed while target also is deleted.
             bool found = false;
             int attempts = 0;
@@ -105,7 +105,7 @@ namespace LiveDirectorySyncEngineLogic
             }
             if (!found)
             {
-                Log.Info($"Got file change message for none existing file or folder {e.FullPath}");
+                Logger.Info($"Got file change message for none existing file or folder {e.FullPath}");
                 return;
             }
             //not interested in update of folders as we check the folder content.
@@ -122,7 +122,7 @@ namespace LiveDirectorySyncEngineLogic
 
         public void OnCreate(object source, FileSystemEventArgs e)
         {
-            Log.Info($"SyncWorker creation of {e.FullPath}.");
+            Logger.Info($"SyncWorker creation of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             _syncActionHandlere.Create(new SyncCreateActionCommand() { SourceFile = syncFileInfo });
         }

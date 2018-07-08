@@ -32,17 +32,17 @@ namespace LiveDirectorySyncEngineConsoleApp
             this.DataContext = _bindingContext;
 
             ResetLoggers(settings);
-            Log.Info("Started application");
+                Logger.Info("Started application");
         }
 
         private void ResetLoggers(SyncSettings settings)
         {
-            Log.RemoveAll();
-            Log.Level = settings.LogLevel;
-            Log.AddLogger(new ScreenLogger(AddLog));
+            Logger.RemoveAll();
+            Logger.Level = settings.LogLevel;
+            Logger.AddLogger(new ScreenLogger(AddLog));
             if (settings.LogPath?.Length > 0)
             {
-                Log.AddLogger(new FileLogger(settings.LogPath, "DirectorySync"));
+                Logger.AddLogger(new FileLogger(settings.LogPath, "DirectorySync"));
             }
         }
 
@@ -58,7 +58,7 @@ namespace LiveDirectorySyncEngineConsoleApp
             }
             catch (InvalidInputException ex)
             {
-                Log.Error("Failed to start sync: ", ex);
+                Logger.Error("Failed to start sync: ", ex);
                 MessageBox.Show(ex.Message);
                 EnableSyncStart();
             }
@@ -110,17 +110,6 @@ namespace LiveDirectorySyncEngineConsoleApp
         #endregion
     }
 
-    public class LogLevel
-    {
-        public EnumLogLevel Level { get; }
-        public string Description => Level.ToString();
-
-        public LogLevel(EnumLogLevel level)
-        {
-            Level = level;
-        }
-    }
-
     public class BindingContext
     {
         private readonly SyncSettings _settings;
@@ -131,12 +120,7 @@ namespace LiveDirectorySyncEngineConsoleApp
         {
             _settings = settings;
 
-            LogLevels = new List<LogLevel>();
-            Array valuesAsArray = Enum.GetValues(typeof(EnumLogLevel));
-            foreach(int value in valuesAsArray)
-            {
-                LogLevels.Add(new LogLevel((EnumLogLevel)value));
-            }
+            LogLevels = new LogLevelList();
         }
     }
 }
