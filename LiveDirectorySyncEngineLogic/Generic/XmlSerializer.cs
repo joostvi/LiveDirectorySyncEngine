@@ -41,7 +41,7 @@ namespace LiveDirectorySyncEngineLogic.Generic
         {
             if (data == null)
             {
-                throw new NullReferenceException("parameter data is null.");
+                throw new ArgumentNullException(nameof(data));
             }
             Type tType = data.GetType();
             if (!tType.IsSerializable)

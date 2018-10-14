@@ -1,4 +1,4 @@
-﻿using LiveDirectorySyncEngineLogic.Settings;
+﻿using LiveDirectorySyncEngineLogic.Generic.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;

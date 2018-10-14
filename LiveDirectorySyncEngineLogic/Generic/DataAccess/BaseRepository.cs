@@ -8,7 +8,7 @@ namespace LiveDirectorySyncEngineLogic.Generic.DataAccess
     {
         private readonly IDBConnection _Connection;
 
-        public BaseRepository(IDBConnection connection)
+        protected BaseRepository(IDBConnection connection)
         {
             _Connection = connection ?? throw new NullReferenceException(nameof(connection) + " is missing a value!");
   

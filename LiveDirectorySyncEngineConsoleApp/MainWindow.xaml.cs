@@ -5,8 +5,8 @@ using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.Generic.Log;
 using LiveDirectorySyncEngineConsoleApp.Logging;
 using System.Collections.Generic;
-using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
+using LiveDirectorySyncEngineLogic.Generic.Exceptions;
 
 namespace LiveDirectorySyncEngineConsoleApp
 {

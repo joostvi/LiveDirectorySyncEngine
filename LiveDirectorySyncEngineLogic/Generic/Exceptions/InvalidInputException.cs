@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
-namespace LiveDirectorySyncEngineLogic.Settings
+namespace LiveDirectorySyncEngineLogic.Generic.Exceptions
 {
     [Serializable]
     public class InvalidInputException : Exception

@@ -4,6 +4,7 @@ using LiveDirectorySyncEngineLogic.Settings;
 using System.IO;
 using System;
 using LiveDirectorySyncEngineLogic.Generic.Log;
+using LiveDirectorySyncEngineLogic.Generic.Exceptions;
 
 namespace LiveDirectorySyncEngineLogic
 {

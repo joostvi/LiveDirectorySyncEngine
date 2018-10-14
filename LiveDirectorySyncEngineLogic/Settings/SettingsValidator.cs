@@ -1,4 +1,5 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic;
+using LiveDirectorySyncEngineLogic.Generic.Exceptions;
 
 namespace LiveDirectorySyncEngineLogic.Settings
 {

@@ -63,7 +63,6 @@ namespace LiveDirectorySyncEngineLogic
             _watcher.Renamed += new RenamedEventHandler(OnRenamed);
             _watcher.Error += new ErrorEventHandler(OnError);
             _watcher.EnableRaisingEvents = true;
-
         }
 
         public void OnError(object sender, ErrorEventArgs e)
