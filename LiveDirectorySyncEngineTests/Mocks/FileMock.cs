@@ -1,4 +1,4 @@
-﻿using LiveDirectorySyncEngineLogic.Generic;
+﻿using GenericClassLibrary.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,6 +39,11 @@ namespace LiveDirectorySyncEngineTests.Mocks
         }
 
         public void Move(string sourceFileName, string destFileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetExtension(string aFile)
         {
             throw new NotImplementedException();
         }

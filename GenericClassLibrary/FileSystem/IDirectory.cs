@@ -1,4 +1,4 @@
-﻿namespace LiveDirectorySyncEngineLogic.Generic
+﻿namespace GenericClassLibrary.FileSystem
 {
     public interface IDirectory
     {

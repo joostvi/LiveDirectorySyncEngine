@@ -1,4 +1,4 @@
-﻿using LiveDirectorySyncEngineLogic.Generic;
+﻿using GenericClassLibrary.FileSystem;
 
 namespace LiveDirectorySyncEngineLogic.Settings
 {

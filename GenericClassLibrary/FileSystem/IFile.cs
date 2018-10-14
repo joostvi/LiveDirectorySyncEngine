@@ -1,4 +1,4 @@
-﻿namespace LiveDirectorySyncEngineLogic.Generic
+﻿namespace GenericClassLibrary.FileSystem
 {
     public interface IFile
     {
@@ -6,5 +6,7 @@
         void Delete(string path);
         bool Exists(string path);
         void Move(string sourceFileName, string destFileName);
+
+        string GetExtension(string aFile);
     }
 }

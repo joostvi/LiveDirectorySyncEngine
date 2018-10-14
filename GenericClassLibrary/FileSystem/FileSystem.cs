@@ -1,11 +1,11 @@
 ﻿using System.IO;
 
-namespace LiveDirectorySyncEngineLogic.Generic
+namespace GenericClassLibrary.FileSystem
 {
     public class FileSystem : IFileSystem
     {
-        private static IDirectory _Directory = new DirectoryActions();
-        private static IFile _File = new FileActions();
+        private static readonly IDirectory _Directory = new DirectoryActions();
+        private static readonly IFile _File = new FileActions();
 
         public IDirectory Directory => _Directory;
 

@@ -1,7 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using LiveDirectorySyncEngineLogic;
-using LiveDirectorySyncEngineLogic.Generic;
+using GenericClassLibrary.FileSystem;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using LiveDirectorySyncEngineTests.Mocks;
@@ -26,9 +25,11 @@ namespace LiveDirectorySyncEngineTests.UnitTests
         [TestMethod]
         public void TestRename_RenameFile_TargetExists()
         {
-            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
-            mockHelper.FileExists = true;
-            mockHelper.DirectoryExists = false;
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper
+            {
+                FileExists = true,
+                DirectoryExists = false
+            };
             mockHelper.Setup();
 
             SyncRenameActionCommand command = new SyncRenameActionCommand()

@@ -2,7 +2,7 @@
 using LiveDirectorySyncEngineLogic.Settings;
 using System;
 using System.IO;
-using LiveDirectorySyncEngineLogic.Generic;
+using GenericClassLibrary.FileSystem;
 using LiveDirectorySyncEngineLogic.Generic.Log;
 using System.Threading;
 

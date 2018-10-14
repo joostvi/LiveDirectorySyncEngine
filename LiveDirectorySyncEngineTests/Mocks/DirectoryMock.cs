@@ -1,9 +1,7 @@
-﻿using LiveDirectorySyncEngineLogic.Generic;
+﻿using GenericClassLibrary.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LiveDirectorySyncEngineTests.Mocks
 {

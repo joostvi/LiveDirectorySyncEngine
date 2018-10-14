@@ -1,4 +1,4 @@
-﻿using LiveDirectorySyncEngineLogic.Generic;
+﻿using GenericClassLibrary.FileSystem;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using LiveDirectorySyncEngineLogic.Settings;
 using System.IO;

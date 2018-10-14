@@ -4,6 +4,7 @@
 */bin/Debug/*
 */bin/Release/*
 */obj/Debug/*
+*/obj/Release/*
 LiveDirectorySyncEngine/bin/*
 LiveDirectorySyncEngine/bin/Debug/*
 packages/*

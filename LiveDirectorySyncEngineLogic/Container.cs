@@ -1,8 +1,8 @@
-﻿using LiveDirectorySyncEngineLogic.Generic;
-using LiveDirectorySyncEngineLogic.Generic.DataAccess;
+﻿using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess.FileSystem;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
+using GenericClassLibrary.FileSystem;
 using System;
 
 namespace LiveDirectorySyncEngineLogic

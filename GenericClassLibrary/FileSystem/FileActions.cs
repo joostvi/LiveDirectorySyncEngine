@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace LiveDirectorySyncEngineLogic.Generic
+namespace GenericClassLibrary.FileSystem
 {
     public class FileActions : IFile
     {
@@ -24,5 +24,14 @@ namespace LiveDirectorySyncEngineLogic.Generic
             return File.Exists(path);
         }
 
+        public string GetExtension(string aFile)
+        {
+            if (string.IsNullOrEmpty(aFile))
+            {
+                throw new System.ArgumentException($"{nameof(aFile)} is missing a value.", nameof(aFile));
+            }
+
+            return Path.GetExtension(aFile);
+        }
     }
 }

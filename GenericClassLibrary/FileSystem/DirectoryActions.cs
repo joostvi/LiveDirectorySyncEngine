@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace LiveDirectorySyncEngineLogic.Generic
+namespace GenericClassLibrary.FileSystem
 {
     public class DirectoryActions : IDirectory
     {
