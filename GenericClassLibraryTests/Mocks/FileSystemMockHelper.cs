@@ -1,7 +1,7 @@
 ﻿using GenericClassLibrary.FileSystem;
 using Moq;
 
-namespace LiveDirectorySyncEngineTests.Mocks
+namespace GenericClassLibraryTests.Mocks
 {
     public class FileSystemMoqHelper
     {

@@ -1,7 +1,7 @@
 ﻿using GenericClassLibrary.FileSystem;
 using System.Linq;
 
-namespace LiveDirectorySyncEngineTests.Mocks
+namespace GenericClassLibraryTests.Mocks
 {
     public class FileSystemMock : IFileSystem
     {
@@ -14,6 +14,12 @@ namespace LiveDirectorySyncEngineTests.Mocks
             DirectoryMock directory = new DirectoryMock();
             Directory = directory;
             File = new FileMock(directory);
+        }
+
+        public FileSystemMock(IFile file)
+        {
+            Directory = new DirectoryMock();
+            File = file;
         }
 
         public bool IsDirectory(string fullPath)

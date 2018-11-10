@@ -1,5 +1,5 @@
 ﻿using LiveDirectorySyncEngineLogic.Settings;
-using LiveDirectorySyncEngineTests.Mocks;
+using GenericClassLibraryTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LiveDirectorySyncEngineTests.UnitTests

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LiveDirectorySyncEngineTests.Mocks
+namespace GenericClassLibraryTests.Mocks
 {
     public class DirectoryMock : IDirectory
     {

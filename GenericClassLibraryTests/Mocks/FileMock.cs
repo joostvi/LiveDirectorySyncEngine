@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace LiveDirectorySyncEngineTests.Mocks
+namespace GenericClassLibraryTests.Mocks
 {
     public class FileMock : IFile
     {
@@ -35,7 +35,7 @@ namespace LiveDirectorySyncEngineTests.Mocks
 
         public bool Exists(string path)
         {
-            throw new NotImplementedException();
+            return Files.Contains(path);
         }
 
         public void Move(string sourceFileName, string destFileName)

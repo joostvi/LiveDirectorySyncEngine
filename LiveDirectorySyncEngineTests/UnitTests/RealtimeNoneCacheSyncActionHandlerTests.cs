@@ -3,7 +3,7 @@ using LiveDirectorySyncEngineLogic;
 using GenericClassLibrary.FileSystem;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
-using LiveDirectorySyncEngineTests.Mocks;
+using GenericClassLibraryTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
