@@ -181,8 +181,8 @@
     },
     "GenericClassLibrary/1.0.0": {
       "type": "project",
-      "path": "../GenericClassLibrary/GenericClassLibrary.csproj",
-      "msbuildProject": "../GenericClassLibrary/GenericClassLibrary.csproj"
+      "path": "../generic/GenericClassLibrary/GenericClassLibrary.csproj",
+      "msbuildProject": "../generic/GenericClassLibrary/GenericClassLibrary.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -221,8 +221,8 @@
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "C:\\Users\\Joost\\Documents\\GitHub\\LiveDirectorySyncEngine\\GenericClassLibrary\\GenericClassLibrary.csproj": {
-              "projectPath": "C:\\Users\\Joost\\Documents\\GitHub\\LiveDirectorySyncEngine\\GenericClassLibrary\\GenericClassLibrary.csproj"
+            "C:\\Users\\Joost\\Documents\\GitHub\\LiveDirectorySyncEngine\\generic\\GenericClassLibrary\\GenericClassLibrary.csproj": {
+              "projectPath": "C:\\Users\\Joost\\Documents\\GitHub\\LiveDirectorySyncEngine\\generic\\GenericClassLibrary\\GenericClassLibrary.csproj"
             }
           }
         }

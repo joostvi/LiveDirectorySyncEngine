@@ -104,8 +104,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenericClassLibrary\GenericClassLibrary.csproj">
-      <Project>{f36f96a7-5a95-4a73-9f35-ed1141c7db10}</Project>
+    <ProjectReference Include="..\generic\GenericClassLibrary\GenericClassLibrary.csproj">
+      <Project>{3efc831c-7cf4-49fb-9596-fbee0e44ce12}</Project>
       <Name>GenericClassLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\LiveDirectorySyncEngineLogic\LiveDirectorySyncEngineLogic.csproj">

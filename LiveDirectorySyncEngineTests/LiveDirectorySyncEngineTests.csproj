@@ -71,17 +71,21 @@
     <Compile Include="UnitTests\SyncWorkerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenericClassLibraryTests\GenericClassLibraryTests.csproj">
-      <Project>{cfc485d9-4d01-4245-8802-6689a3d606c1}</Project>
+    <ProjectReference Include="..\generic\GenericClassLibraryTests\GenericClassLibraryTests.csproj">
+      <Project>{574b696d-ff46-4b66-babd-6ca6751dfc17}</Project>
       <Name>GenericClassLibraryTests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GenericClassLibrary\GenericClassLibrary.csproj">
-      <Project>{f36f96a7-5a95-4a73-9f35-ed1141c7db10}</Project>
+    <ProjectReference Include="..\generic\GenericClassLibrary\GenericClassLibrary.csproj">
+      <Project>{3efc831c-7cf4-49fb-9596-fbee0e44ce12}</Project>
       <Name>GenericClassLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\LiveDirectorySyncEngineLogic\LiveDirectorySyncEngineLogic.csproj">
       <Project>{8DC63050-8289-4BB3-9DE9-7830467D6F4A}</Project>
       <Name>LiveDirectorySyncEngineLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LiveDirectorySyncEngine\LiveDirectorySyncEngine.csproj">
+      <Project>{e4ccc8c6-a704-4260-964b-c880a1e6b65b}</Project>
+      <Name>LiveDirectorySyncEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
