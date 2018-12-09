@@ -4,12 +4,12 @@ using GenericClassLibrary.FileSystem;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using GenericClassLibraryTests.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Xunit;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
-    [TestClass]
+    [Collection("RealtimeNoneCachedSyncActionHandlerTests")]
     public class RealtimeNoneCachedSyncActionHandlerTests
     {
         private const string _DefaultSourcePath = @"c:\source\";
@@ -22,7 +22,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             return new RealtimeNoneCachedSyncActionHandler(setings, fileSystem);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRename_RenameFile_TargetExists()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper
@@ -41,7 +41,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IFileMock.Verify(a => a.Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRename_RenameFile_TargetDoesNotExists()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -58,7 +58,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IFileMock.Verify(a => a.Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRename_RenameDirectory_TargetExists()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -76,7 +76,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IDirectoryMock.Verify(a => a.Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestRename_RenameDirectory_TargetDoesNotExists()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -94,7 +94,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IDirectoryMock.Verify(a => a.Create(_DefaultTargetPath + "NewName"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCreate_CreateFile_HappyPath()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -108,7 +108,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IFileMock.Verify(a => a.Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCreate_CreateFile_SourceDeleted()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -123,7 +123,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCreate_UpdateFile_SourceDeleted()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -139,7 +139,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             GetHandler(mockHelper.IFileSystemMock.Object).Update(command);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCreate_CreateFile_NoneExistingTargetFolder()
         {
             FileSystemMock fileSystemMock = new FileSystemMock();
@@ -151,13 +151,13 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             GetHandler(fileSystemMock).Create(command);
 
             DirectoryMock directories = (DirectoryMock)fileSystemMock.Directory;
-            Assert.IsTrue(directories.Directories.Contains(_DefaultTargetPath + "UnknownFolder"));
+            Assert.True(directories.Directories.Contains(_DefaultTargetPath + "UnknownFolder"));
 
             FileMock files = (FileMock)fileSystemMock.File;
-            Assert.IsTrue(files.Files.Contains(_DefaultTargetPath + "UnknownFolder\\File.txt"));
+            Assert.True(files.Files.Contains(_DefaultTargetPath + "UnknownFolder\\File.txt"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCreate_CreateDirectory_HappyPath()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -172,7 +172,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IDirectoryMock.Verify(a => a.Create(_DefaultTargetPath + "NewName"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestCreate_CreateDirectory_NoneExistingTargetFolder()
         {
             FileSystemMock fileSystemMock = new FileSystemMock();
@@ -184,13 +184,13 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             GetHandler(fileSystemMock).Create(command);
 
             DirectoryMock directories = (DirectoryMock)fileSystemMock.Directory;
-            Assert.IsTrue(directories.Directories.Contains(_DefaultTargetPath + "UnknownFolder\\Directory"));
+            Assert.True(directories.Directories.Contains(_DefaultTargetPath + "UnknownFolder\\Directory"));
 
             FileMock files = (FileMock)fileSystemMock.File;
-            Assert.IsTrue(files.Files.Count == 0);
+            Assert.True(files.Files.Count == 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStart_MissingSourcePath_ShouldThrowException()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -199,12 +199,12 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.Setup();
 
             var handler = GetHandler(mockHelper.IFileSystemMock.Object);
-            Assert.ThrowsException<InvalidInputException>(() => handler.CanStart());
+            Assert.Throws<InvalidInputException>(() => handler.CanStart());
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
             mockHelper.IDirectoryMock.VerifyNoOtherCalls();
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStart_MissingTargetPath_ShouldThrowException()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -215,7 +215,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultTargetPath)).Returns(false);
 
             var handler = GetHandler(mockHelper.IFileSystemMock.Object);
-            Assert.ThrowsException<InvalidInputException>(() => handler.CanStart());
+            Assert.Throws<InvalidInputException>(() => handler.CanStart());
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultTargetPath));
         }

@@ -1,14 +1,14 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic.Log;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using System;
 
 namespace LiveDirectorySyncEngineTests.UnitTests.Generic
 {
-    [TestClass]
+    [Collection("LoggingTests")]
     public class LoggingTests
     {
-        [TestMethod]
+        [Fact]
         public void Logger_Error_Test()
         {
             //setup
@@ -24,7 +24,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             logger.Verify(a => a.Error(logText));
         }
 
-        [TestMethod]
+        [Fact]
         public void Logger_Info_Test()
         {
             //setup
@@ -40,7 +40,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             logger.Verify(a => a.Info(logText));
         }
 
-        [TestMethod]
+        [Fact]
         public void Logger_Debug_Test()
         {
             //setup
@@ -56,7 +56,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             logger.Verify(a => a.Debug(logText));
         }
 
-        [TestMethod]
+        [Fact]
         public void Logger_Warning_Test()
         {
             //setup
@@ -72,7 +72,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             logger.Verify(a => a.Warning(logText));
         }
 
-        [TestMethod]
+        [Fact]
         public void Logger_MultipleLoggers_Test()
         {
             //setup
@@ -91,7 +91,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             logger2.Verify(a => a.Debug(logText));
         }
 
-        [TestMethod]
+        [Fact]
         public void Logger_LevelHigherThenRequested_Test()
         {
             //setup
@@ -107,7 +107,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             logger.Verify(a => a.Debug(logText), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void Logger_LevelLowerThenRequested_Test()
         {
             //setup
@@ -123,13 +123,13 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             logger.Verify(a => a.Error(logText));
         }
 
-        [TestMethod]
+        [Fact]
         public void LogLevelList_ContainsAllItems_Test()
         {
             LogLevelList logLevels = new LogLevelList();
             Array valuesAsArray = Enum.GetValues(typeof(EnumLogLevel));
 
-            Assert.AreEqual(valuesAsArray.Length, logLevels.Count);
+            Assert.Equal(valuesAsArray.Length, logLevels.Count);
         }
     }
 }

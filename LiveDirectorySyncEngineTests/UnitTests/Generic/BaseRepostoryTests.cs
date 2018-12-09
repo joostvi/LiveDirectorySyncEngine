@@ -1,13 +1,13 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using LiveDirectorySyncEngineLogic.Generic.Model;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using xunit;
 
 namespace LiveDirectorySyncEngineTests.UnitTests.Generic
 {
-    [TestClass]
+    [Collection("BaseRepostoryTests")]
     public class BaseRepostoryTests
     {
         private class TestModel : ModelBase
@@ -24,13 +24,13 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Log_Constructor_Test()
         {
             Assert.ThrowsException<System.NullReferenceException>(() => new TestRepository(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Log_GetAll_Test()
         {
             //setup
@@ -44,7 +44,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             connection.Verify(a => a.GetAll<TestModel>());
         }
 
-        [TestMethod]
+        [Fact]
         public void Log_Get_Test()
         {
             //setup
@@ -59,7 +59,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests.Generic
             connection.Verify(a => a.Get<TestModel>(id));
         }
 
-        [TestMethod]
+        [Fact]
         public void Log_Store_Test()
         {
             //setup

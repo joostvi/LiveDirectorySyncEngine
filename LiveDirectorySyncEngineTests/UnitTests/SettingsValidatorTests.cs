@@ -1,10 +1,10 @@
 ﻿using LiveDirectorySyncEngineLogic.Settings;
 using GenericClassLibraryTests.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
-    [TestClass]
+    [Collection("SettingsValidatorTests")]
     public class SettingsValidatorTests
     {
 
@@ -17,7 +17,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             return new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info, logPath);
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStart_MissingSourcePath_ShouldThrowException()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -25,12 +25,12 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.DirectoryExists = false;
             mockHelper.Setup();
             SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock.Object);
-            Assert.ThrowsException<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
+            Assert.Throws<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
             mockHelper.IDirectoryMock.VerifyNoOtherCalls();
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStart_MissingTargetPath_ShouldThrowException()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -41,12 +41,12 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultTargetPath)).Returns(false);
 
             SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock.Object);
-            Assert.ThrowsException<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
+            Assert.Throws<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultTargetPath));
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStart_NotExistingLogPath_ShouldThrowException()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -57,13 +57,13 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultLogPath)).Returns(false);
 
             SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock.Object);
-            Assert.ThrowsException<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
+            Assert.Throws<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultTargetPath));
             mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultLogPath));
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStart_LogPathNotSet_IsAllowed()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();

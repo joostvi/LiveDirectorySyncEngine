@@ -2,12 +2,12 @@
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using GenericClassLibraryTests.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Xunit;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
-    [TestClass]
+    [Collection("SyncWorkerTests")]
     public class SyncWorkerTests
     {
 
@@ -15,7 +15,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
         private const string _DefaultTargetPath = "D:\\Anotherfolder\\";
         private const string _DefaultLogPath = "D:\\Logfolder\\";
 
-        [TestMethod]
+        [Fact]
         public void CanStart_IsCalledAndExceptionIsThrow()
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
@@ -27,7 +27,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
 
             SyncSettings syncSettings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info, _DefaultLogPath);
             SyncWorker syncWorker = new SyncWorker(syncSettings, syncActionHandler.Object, mockHelper.IFileSystemMock.Object);
-            Assert.ThrowsException<InvalidInputException>( () => syncWorker.Start());
+            Assert.Throws<InvalidInputException>( () => syncWorker.Start());
             syncActionHandler.Verify(a => a.CanStart());
             mockHelper.IDirectoryMock.VerifyNoOtherCalls();
         }
