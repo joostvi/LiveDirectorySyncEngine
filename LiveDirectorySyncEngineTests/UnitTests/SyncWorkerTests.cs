@@ -20,9 +20,11 @@ namespace LiveDirectorySyncEngineTests.UnitTests
         [Fact]
         public void CanStart_IsCalledAndExceptionIsThrow()
         {
-            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
-            mockHelper.FileExists = true;
-            mockHelper.DirectoryExists = false;
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper
+            {
+                FileExists = true,
+                DirectoryExists = false
+            };
             mockHelper.Setup();
             Mock<ISyncActionHandler> syncActionHandler = new Mock<ISyncActionHandler>();
             syncActionHandler.Setup(a => a.CanStart()).Throws<InvalidInputException>();

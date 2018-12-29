@@ -52,11 +52,13 @@ namespace LiveDirectorySyncEngineLogic
 
         private void Watch()
         {
-            _watcher = new FileSystemWatcher();
-            _watcher.IncludeSubdirectories = true;
-            _watcher.Path = _Settings.SourcePath;
-            _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            _watcher.Filter = "*.*";
+            _watcher = new FileSystemWatcher
+            {
+                IncludeSubdirectories = true,
+                Path = _Settings.SourcePath,
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName,
+                Filter = "*.*"
+            };
             _watcher.Created += new FileSystemEventHandler(OnCreate);
             _watcher.Changed += new FileSystemEventHandler(OnChanged);
             _watcher.Deleted += new FileSystemEventHandler(OnDeleted);

@@ -15,8 +15,10 @@ namespace LiveDirectorySyncEngineLogic.Generic.DataAccess.FileSystem
         /// <param name="connectionString"></param>
         public FileStoreConnection(string connectionString)
         {
-            DbConnectionStringBuilder = new DbConnectionStringBuilder();
-            DbConnectionStringBuilder.ConnectionString = connectionString;
+            DbConnectionStringBuilder = new DbConnectionStringBuilder
+            {
+                ConnectionString = connectionString
+            };
             ConnectionString = connectionString;
         }
 
@@ -34,7 +36,7 @@ namespace LiveDirectorySyncEngineLogic.Generic.DataAccess.FileSystem
 
         public override bool Equals(object obj)
         {
-            var connection = obj as FileStoreConnection;
+            FileStoreConnection connection = obj as FileStoreConnection;
             return connection != null &&
                    ConnectionString == connection.ConnectionString;
         }

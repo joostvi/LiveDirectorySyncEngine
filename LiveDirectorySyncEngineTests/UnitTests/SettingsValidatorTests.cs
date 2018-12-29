@@ -35,9 +35,11 @@ namespace LiveDirectorySyncEngineTests.UnitTests
         [Fact]
         public void CanStart_MissingTargetPath_ShouldThrowException()
         {
-            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
-            mockHelper.FileExists = true;
-            mockHelper.DirectoryExists = true;
+            FileSystemMoqHelper mockHelper = new FileSystemMoqHelper
+            {
+                FileExists = true,
+                DirectoryExists = true
+            };
             mockHelper.Setup();
 
             mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultTargetPath)).Returns(false);
