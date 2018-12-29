@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using LiveDirectorySyncEngineLogic;
 using GenericClassLibrary.FileSystem;
+using GenericClassLibrary.Validation;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using GenericClassLibraryTests.Mocks;
@@ -18,7 +19,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
 
         private RealtimeNoneCachedSyncActionHandler GetHandler(IFileSystem fileSystem)
         {
-            SyncSettings setings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info, _DefaultLogPath);
+            SyncSettings setings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, GenericClassLibrary.Logging.EnumLogLevel.Info, _DefaultLogPath);
             return new RealtimeNoneCachedSyncActionHandler(setings, fileSystem);
         }
 

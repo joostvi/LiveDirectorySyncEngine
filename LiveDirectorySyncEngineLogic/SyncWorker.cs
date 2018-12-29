@@ -3,7 +3,7 @@ using LiveDirectorySyncEngineLogic.Settings;
 using System;
 using System.IO;
 using GenericClassLibrary.FileSystem;
-using LiveDirectorySyncEngineLogic.Generic.Log;
+using GenericClassLibrary.Logging;
 using System.Threading;
 
 namespace LiveDirectorySyncEngineLogic

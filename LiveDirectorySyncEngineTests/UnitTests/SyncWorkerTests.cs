@@ -2,6 +2,8 @@
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using GenericClassLibraryTests.Mocks;
+using GenericClassLibrary.Logging;
+using GenericClassLibrary.Validation;
 using Moq;
 using Xunit;
 
@@ -25,7 +27,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             Mock<ISyncActionHandler> syncActionHandler = new Mock<ISyncActionHandler>();
             syncActionHandler.Setup(a => a.CanStart()).Throws<InvalidInputException>();
 
-            SyncSettings syncSettings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info, _DefaultLogPath);
+            SyncSettings syncSettings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, EnumLogLevel.Info, _DefaultLogPath);
             SyncWorker syncWorker = new SyncWorker(syncSettings, syncActionHandler.Object, mockHelper.IFileSystemMock.Object);
             Assert.Throws<InvalidInputException>( () => syncWorker.Start());
             syncActionHandler.Verify(a => a.CanStart());

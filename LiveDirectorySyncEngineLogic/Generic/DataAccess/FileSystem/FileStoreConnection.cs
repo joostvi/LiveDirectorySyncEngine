@@ -1,5 +1,4 @@
 ﻿using LiveDirectorySyncEngineLogic.Generic.Model;
-using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

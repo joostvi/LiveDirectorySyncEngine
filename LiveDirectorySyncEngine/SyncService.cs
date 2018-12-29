@@ -2,7 +2,7 @@
 using System.ServiceProcess;
 using LiveDirectorySyncEngineLogic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
-using LiveDirectorySyncEngineLogic.Generic.Log;
+using GenericClassLibrary.Logging;
 using LiveDirectorySyncEngineLogic.Settings;
 
 namespace LiveDirectorySyncEngine

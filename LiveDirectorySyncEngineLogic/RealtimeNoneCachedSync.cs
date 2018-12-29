@@ -1,9 +1,10 @@
 ﻿using GenericClassLibrary.FileSystem;
+using GenericClassLibrary.Validation;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using LiveDirectorySyncEngineLogic.Settings;
 using System.IO;
 using System;
-using LiveDirectorySyncEngineLogic.Generic.Log;
+using GenericClassLibrary.Logging;
 
 namespace LiveDirectorySyncEngineLogic
 {

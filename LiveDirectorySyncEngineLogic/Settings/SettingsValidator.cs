@@ -1,4 +1,5 @@
 ﻿using GenericClassLibrary.FileSystem;
+using GenericClassLibrary.Validation;
 
 namespace LiveDirectorySyncEngineLogic.Settings
 {

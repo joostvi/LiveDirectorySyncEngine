@@ -2,11 +2,11 @@
 using System;
 using System.Windows;
 using LiveDirectorySyncEngineLogic.Settings;
-using LiveDirectorySyncEngineLogic.Generic.Log;
+using GenericClassLibrary.Logging;
 using LiveDirectorySyncEngineConsoleApp.Logging;
 using System.Collections.Generic;
-using LiveDirectorySyncEngineLogic.Generic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
+using GenericClassLibrary.Validation;
 
 namespace LiveDirectorySyncEngineConsoleApp
 {

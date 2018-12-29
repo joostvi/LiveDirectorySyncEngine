@@ -1,5 +1,7 @@
 ﻿using LiveDirectorySyncEngineLogic.Settings;
 using GenericClassLibraryTests.Mocks;
+using GenericClassLibrary.Validation;
+using GenericClassLibrary.Logging;
 using Xunit;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
@@ -14,7 +16,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
 
         private SyncSettings GetSettings(string logPath = _DefaultLogPath)
         {
-            return new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, LiveDirectorySyncEngineLogic.Generic.Log.EnumLogLevel.Info, logPath);
+            return new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, EnumLogLevel.Info, logPath);
         }
 
         [Fact]

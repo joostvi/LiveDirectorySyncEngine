@@ -1,4 +1,4 @@
-﻿using LiveDirectorySyncEngineLogic.Generic.Log;
+﻿using GenericClassLibrary.Logging;
 
 namespace LiveDirectorySyncEngineConsoleApp.Logging
 {
