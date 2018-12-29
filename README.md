@@ -7,5 +7,5 @@ I'm creating this to just to get some experience with filewatchter in c# plus to
 
 
 <!-- prettier-ignore -->
-[tci badge]: https://travis-ci.org/joostvi/LiveDirectorySyncEngine?branch=master
+[tci badge]: https://travis-ci.org/joostvi/LiveDirectorySyncEngine.svg?branch=master
 [tci link]: https://travis-ci.org/joostvi/LiveDirectorySyncEngine
