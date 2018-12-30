@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 
+  <!--<Target Name="CI" DependsOnTargets="Build" />-->
+ <!-- We need a seperate build process for travis-ci as mono does not support xaml format-->
+  <Target Name="Build">
+    <MSBuild Projects="generic/GenericClassLibrary/GenericClassLibrary.csproj" Properties="Configuration=Release;Platform=AnyCPU" />
+    <MSBuild Projects="generic/GenericClassLibraryTests/GenericClassLibraryTests.csproj" Properties="Configuration=Release;Platform=AnyCPU" />
+    <MSBuild Projects="LiveDirectorySyncEngine/LiveDirectorySyncEngine.csproj" Properties="Configuration=Release;Platform=AnyCPU" />
+    <MSBuild Projects="LiveDirectorySyncEngineLogic/LiveDirectorySyncEngineLogic.csproj" Properties="Configuration=Release;Platform=AnyCPU" />
+    <MSBuild Projects="LiveDirectorySyncEngineTests/LiveDirectorySyncEngineTests.csproj" Properties="Configuration=Release;Platform=AnyCPU" />
+  </Target>
+</Project>
