@@ -8,3 +8,5 @@
 LiveDirectorySyncEngine/bin/*
 LiveDirectorySyncEngine/bin/Debug/*
 packages/*
+*/obj/*
+/LiveDirectorySyncEngineLogic/obj/project.assets.json
