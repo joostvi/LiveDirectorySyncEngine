@@ -26,7 +26,7 @@
           "build/netstandard2.0/NETStandard.Library.targets": {}
         }
       },
-      "YamlDotNet/8.0.0": {
+      "YamlDotNet/8.1.1": {
         "type": "package",
         "compile": {
           "lib/netstandard1.3/YamlDotNet.dll": {}
@@ -39,7 +39,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "YamlDotNet": "8.0.0"
+          "YamlDotNet": "8.1.1"
         },
         "compile": {
           "bin/placeholder/GenericClassLibrary.dll": {}
@@ -193,10 +193,10 @@
         "netstandard.library.nuspec"
       ]
     },
-    "YamlDotNet/8.0.0": {
-      "sha512": "Ib8lKt7TlODREDFLOWef0OmxChsQlTsRSGGx7A6YH8d7Y+YrMg8Z/RneW5WAnDsfygg/Ao2r2ND1UNe0LLPMFw==",
+    "YamlDotNet/8.1.1": {
+      "sha512": "JXPO7bjUUeDIXgzlLAdNFCzrxBxBzYBbXy3MEp2uWIY7KK8LoNogaPhSg2mLuzCN5flp1ydeVqm+4j3tkP0pow==",
       "type": "package",
-      "path": "yamldotnet/8.0.0",
+      "path": "yamldotnet/8.1.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -213,7 +213,7 @@
         "lib/netstandard1.3/YamlDotNet.xml",
         "lib/netstandard2.1/YamlDotNet.dll",
         "lib/netstandard2.1/YamlDotNet.xml",
-        "yamldotnet.8.0.0.nupkg.sha512",
+        "yamldotnet.8.1.1.nupkg.sha512",
         "yamldotnet.nuspec"
       ]
     },
