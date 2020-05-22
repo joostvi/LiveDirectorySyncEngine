@@ -3,7 +3,6 @@ using System;
 using System.Windows;
 using LiveDirectorySyncEngineLogic.Settings;
 using GenericClassLibrary.Logging;
-using LiveDirectorySyncEngineConsoleApp.Logging;
 using System.Collections.Generic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using GenericClassLibrary.Validation;
@@ -32,7 +31,7 @@ namespace LiveDirectorySyncEngineConsoleApp
             {
                 ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository(connection);
                 SyncSettings settings = syncSettingsRepository.Get(1);
-                if(settings == null)
+                if (settings == null)
                 {
                     settings = new SyncSettings();
                 }
@@ -41,14 +40,15 @@ namespace LiveDirectorySyncEngineConsoleApp
 
                 ResetLoggers(settings);
                 Logger.Info("Started application");
-            }          
+            }
         }
 
         private void ResetLoggers(SyncSettings settings)
         {
             Logger.RemoveAll();
             Logger.Level = settings.LogLevel;
-            Logger.AddLogger(new ScreenLogger(AddLog));
+            //Logger.AddLogger(new ScreenLogger(AddLog));
+            LogContent.Reset();
             if (settings.LogPath?.Length > 0)
             {
                 Logger.AddLogger(new FileLogger(settings.LogPath, "DirectorySync"));
@@ -106,21 +106,7 @@ namespace LiveDirectorySyncEngineConsoleApp
             }
         }
 
-        #region logging
-        public void UpdateLogText(string line)
-        {
-            LogContent.Text += line;
-        }
 
-        public delegate void UpdateLogTextDelegate(string line);
-        //see https://msdn.microsoft.com/en-us/library/system.windows.threading.dispatcher(v=vs.110).aspx?cs-save-lang=1&cs-lang=csharp#code-snippet-3
-
-        public void AddLog(object sender, ScreenLogEventArgs logThis)
-        {
-            string line = "\r\n" + DateTime.Now.ToString() + " " + logThis.Level.ToString() + ": " + logThis.Value;
-            this.Dispatcher.Invoke(new UpdateLogTextDelegate(UpdateLogText), line);
-        }
-        #endregion
     }
 
     public class BindingContext
