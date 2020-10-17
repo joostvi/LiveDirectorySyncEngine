@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveDirectorySyncEngine", "LiveDirectorySyncEngine\LiveDirectorySyncEngine.csproj", "{E4CCC8C6-A704-4260-964B-C880A1E6B65B}"
 EndProject
@@ -29,6 +29,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericClassLibraryTests", "generic\GenericClassLibraryTests\GenericClassLibraryTests.csproj", "{574B696D-FF46-4B66-BABD-6CA6751DFC17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericWPFLibrary", "generic\GenericWPFLibrary\GenericWPFLibrary.csproj", "{60E03DF4-B096-455B-A179-BD2135526A6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveDirectorySyncWorker", "LiveDirectorySyncWorker\LiveDirectorySyncWorker.csproj", "{160367C2-0EDF-463F-B27D-BE096D903ABB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -154,6 +156,22 @@ Global
 		{60E03DF4-B096-455B-A179-BD2135526A6E}.Release|x64.Build.0 = Release|Any CPU
 		{60E03DF4-B096-455B-A179-BD2135526A6E}.Release|x86.ActiveCfg = Release|Any CPU
 		{60E03DF4-B096-455B-A179-BD2135526A6E}.Release|x86.Build.0 = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|ARM.Build.0 = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|x64.Build.0 = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Debug|x86.Build.0 = Debug|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|ARM.ActiveCfg = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|ARM.Build.0 = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|x64.ActiveCfg = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|x64.Build.0 = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|x86.ActiveCfg = Release|Any CPU
+		{160367C2-0EDF-463F-B27D-BE096D903ABB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

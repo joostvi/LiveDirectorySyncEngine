@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-LiveDirectorySyncWorker-89C0D942-4713-4B7A-A803-19EF3C7AA6AC</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LiveDirectorySyncEngineLogic\LiveDirectorySyncEngineLogic.csproj" />
+  </ItemGroup>
+</Project>
