@@ -4,6 +4,7 @@ using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using GenericClassLibrary.FileSystem;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace LiveDirectorySyncEngineLogic
 {
@@ -30,5 +31,17 @@ namespace LiveDirectorySyncEngineLogic
             string dir = "path=" + AppDomain.CurrentDomain.BaseDirectory;
             return new FileStoreConnection(dir);
         }
+
+        public static IDBConnection GetDBConnection(IConfiguration config)
+        {
+            //File store implementations
+            string dir = config.GetConnectionString("DefaultConnection");
+            if (dir == null)
+            {
+                dir = "path=" + AppDomain.CurrentDomain.BaseDirectory;
+            }
+            return new FileStoreConnection(dir);
+        }
+
     }
 }

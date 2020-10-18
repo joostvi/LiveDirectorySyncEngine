@@ -10,6 +10,8 @@ I started by watching a youtube video of Tim Corey (https://www.youtube.com/watc
 
 It appeared to be handy to watch a video on some core concepts as well to learn how to use the appsettings file and how the logging works. Also from Tim Corey. (https://www.youtube.com/watch?v=GAOCe-2nXqc)
 
-Settings is needed as I wanted a setting to point to the settings fiel which is configured via the LiveDirectorySyncEngineConsoleApp.
-Logging is something I wanted to know about to know how to use my own "logging" classes. After some experiments and also investigating about scopes (https://www.codeproject.com/Articles/1556475/How-to-write-a-custom-logging-provider-in-Asp-Net) I came to the conclusion that probably I will need to revist how I do logging.
+Settings is needed as I wanted a setting to point to the settings file which is configured via the LiveDirectorySyncEngineConsoleApp.
+Logging is something I wanted to know about to know how to use my own "logging" classes. After some experiments and also investigating about scopes (https://www.codeproject.com/Articles/1556475/How-to-write-a-custom-logging-provider-in-Asp-Net) I have to revisit how I do logging. 
+The static library does not fully fit in the concept of how logging in .net core is done.
+Also wondering how scopes work in combination with async. But first refactor logging.
 

@@ -42,7 +42,9 @@ namespace LiveDirectorySyncWorker
 
         static void LoggerBuilder(ILoggingBuilder builder)
         {
-            builder.AddConsole().AddProvider(new LogProvider());
+            Logger logger = new Logger().AddConsoleLogger();
+            Logger.Level = EnumLogLevel.Debug;
+            builder.AddProvider(new LogProvider());
         }
 
 
@@ -121,6 +123,10 @@ namespace LiveDirectorySyncWorker
                         return EnumLogLevel.Debug;
                     case MsLogLevel.Critical:
                         return EnumLogLevel.Critical;
+                    case MsLogLevel.Trace:
+                        return EnumLogLevel.Trace;
+                    case MsLogLevel.None:
+                        return EnumLogLevel.None;
                     default:
                         return EnumLogLevel.None;
                 }

@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GenericClassLibrary.Exceptions;
 using LiveDirectorySyncEngineLogic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using LiveDirectorySyncEngineLogic.Settings;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -15,21 +14,21 @@ namespace LiveDirectorySyncWorker
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IConfiguration _config;
         private SyncWorker worker;
 
-        public Worker(ILogger<Worker> logger)
+
+        public Worker(ILogger<Worker> logger, IConfiguration config)
         {
             _logger = logger;
+            _config = config;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            using (_logger.BeginScope("test {1}", "bla" ))
-            {
-                _logger.LogInformation("SyncService started");
-            }
+            _logger.LogInformation("SyncService started");
             //TODO implement async ISyncAction implementation with off line handling.
-            using (IDBConnection connection = Container.GetDBConnection())
+            using (IDBConnection connection = Container.GetDBConnection(_config))
             {
                 ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository(connection);
                 SyncSettings settings = syncSettingsRepository.Get(1);
