@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using GenericClassLibrary.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Configuration;
 using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace LiveDirectorySyncWorker
@@ -37,13 +34,14 @@ namespace LiveDirectorySyncWorker
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true) //settings found here override appsettings.json
-                .AddEnvironmentVariables(); //setings found here override appsettings*.
+                .AddEnvironmentVariables(); //settings found here override appsettings*.
         }
 
         static void LoggerBuilder(ILoggingBuilder builder)
         {
-            Logger logger = new Logger().AddConsoleLogger();
+            new Logger().AddConsoleLogger();
             Logger.Level = EnumLogLevel.Debug;
+            builder.ClearProviders(); //Remove any default provider otherwise every thing will be logged to the console twice.
             builder.AddProvider(new LogProvider());
         }
 
@@ -57,19 +55,19 @@ namespace LiveDirectorySyncWorker
 
             public void Dispose()
             {
-                //nothing todo
+                //nothing to do here
             }
 
 
-            IExternalScopeProvider fScopeProvider;
+            private IExternalScopeProvider _fScopeProvider;
 
             internal IExternalScopeProvider ScopeProvider
             {
                 get
                 {
-                    if (fScopeProvider == null)
-                        fScopeProvider = new LoggerExternalScopeProvider();
-                    return fScopeProvider;
+                    if (_fScopeProvider == null)
+                        _fScopeProvider = new LoggerExternalScopeProvider();
+                    return _fScopeProvider;
                 }
             }
         }
@@ -80,9 +78,6 @@ namespace LiveDirectorySyncWorker
             public string CategoryName { get; }
             public DotNetCoreLogger(LogProvider logProvider, string categoryName)
             {
-                //Logger.AddLogger(new ConsoleLogger());
-                //Logger.Level = EnumLogLevel.Debug;
-
                 LogProvider = logProvider;
                 CategoryName = categoryName;
             }
