@@ -36,7 +36,7 @@ namespace LiveDirectorySyncWorker
                 {
                     throw new InvalidConfigurationException("Settings not found!");
                 }
-                worker = new SyncWorker(settings, Container.GetRealtimeNoneCacheSyncActionHandler(settings), Container.GetFileSystem());
+                worker = new SyncWorker(settings, Container.GetRealtimeNoneCacheSyncActionHandler(settings), Container.GetFileSystem(), cancellationToken);
             }
             try
             {

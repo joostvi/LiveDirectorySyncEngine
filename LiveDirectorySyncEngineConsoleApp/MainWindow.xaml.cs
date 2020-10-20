@@ -6,6 +6,7 @@ using GenericClassLibrary.Logging;
 using System.Collections.Generic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using GenericClassLibrary.Validation;
+using System.Threading;
 
 namespace LiveDirectorySyncEngineConsoleApp
 {
@@ -17,6 +18,7 @@ namespace LiveDirectorySyncEngineConsoleApp
 
         private SyncWorker _Worker;
         private BindingContext _bindingContext;
+        private readonly CancellationTokenSource _source = new CancellationTokenSource();
 
         public MainWindow()
         {
@@ -57,7 +59,7 @@ namespace LiveDirectorySyncEngineConsoleApp
 
         private void BtnRunSyncApp_Click(object sender, RoutedEventArgs e)
         {
-            _Worker = new SyncWorker(_bindingContext.Settings, Container.GetRealtimeNoneCacheSyncActionHandler(_bindingContext.Settings), Container.GetFileSystem());
+            _Worker = new SyncWorker(_bindingContext.Settings, Container.GetRealtimeNoneCacheSyncActionHandler(_bindingContext.Settings), Container.GetFileSystem(), _source.Token);
 
             try
             {
@@ -75,6 +77,7 @@ namespace LiveDirectorySyncEngineConsoleApp
 
         private void BtnStopSyncApp_Click(object sender, RoutedEventArgs e)
         {
+            _source.Cancel();
             _Worker.Stop();
             EnableSyncStart();
         }

@@ -19,12 +19,14 @@ namespace LiveDirectorySyncEngineLogic
         private FileSystemWatcher _watcher;
         private readonly ISyncActionHandler _syncActionHandlere;
         private readonly IFileSystem _FileSystem;
+        private readonly CancellationToken _cancellationToken;
 
-        public SyncWorker(SyncSettings settings, ISyncActionHandler syncActionHandlere, IFileSystem fileSystem)
+        public SyncWorker(SyncSettings settings, ISyncActionHandler syncActionHandlere, IFileSystem fileSystem, CancellationToken cancellationToken)
         {
             _Settings = settings;
             _syncActionHandlere = syncActionHandlere;
             _FileSystem = fileSystem;
+            _cancellationToken = cancellationToken;
         }
 
         public void Start()
@@ -37,6 +39,7 @@ namespace LiveDirectorySyncEngineLogic
         public void Stop()
         {
             Logger.Info("SyncWorker stopped.");
+            HandleCancellation();
             _watcher.Dispose();
             _watcher = null;
         }
@@ -68,6 +71,14 @@ namespace LiveDirectorySyncEngineLogic
 
         }
 
+        private void HandleCancellation()
+        {
+            if (_cancellationToken.IsCancellationRequested)
+            {
+                _watcher.EnableRaisingEvents = false;
+            }
+        }
+
         public void OnError(object sender, ErrorEventArgs e)
         {
             Exception ex = e.GetException();
@@ -76,11 +87,14 @@ namespace LiveDirectorySyncEngineLogic
 
         public void OnRenamed(object sender, RenamedEventArgs e)
         {
-            SyncRenameActionCommand command = new SyncRenameActionCommand();
-            command.OldFileName = e.OldName;
-            command.NewFileName = e.Name;
+            SyncRenameActionCommand command = new SyncRenameActionCommand
+            {
+                OldFileName = e.OldName,
+                NewFileName = e.Name
+            };
             Logger.Info($"SyncWorker rename of {e.OldName} to {e.Name}.");
             _syncActionHandlere.Rename(command);
+            HandleCancellation();
         }
 
         public void OnDeleted(object sender, FileSystemEventArgs e)
@@ -88,6 +102,7 @@ namespace LiveDirectorySyncEngineLogic
             Logger.Info($"SyncWorker delete of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             _syncActionHandlere.Delete(new SyncDeleteActionCommand() { SourceFile = syncFileInfo });
+            HandleCancellation();
         }
 
         public void OnChanged(object source, FileSystemEventArgs e)
@@ -115,6 +130,7 @@ namespace LiveDirectorySyncEngineLogic
             if (_FileSystem.IsDirectory(e.FullPath)) return;
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             _syncActionHandlere.Update(new SyncUpdateActionCommand() { SourceFile = syncFileInfo });
+            HandleCancellation();
         }
 
         private bool ExistsFileOrFolder(string fileOrFolder)
@@ -127,6 +143,7 @@ namespace LiveDirectorySyncEngineLogic
             Logger.Info($"SyncWorker creation of {e.FullPath}.");
             SyncFileInfo syncFileInfo = new SyncFileInfo(e.FullPath);
             _syncActionHandlere.Create(new SyncCreateActionCommand() { SourceFile = syncFileInfo });
+            HandleCancellation();
         }
     }
 }

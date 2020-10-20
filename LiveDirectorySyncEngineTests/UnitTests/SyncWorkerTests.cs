@@ -6,6 +6,7 @@ using GenericClassLibrary.Logging;
 using GenericClassLibrary.Validation;
 using Moq;
 using Xunit;
+using System.Threading;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
@@ -30,7 +31,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             syncActionHandler.Setup(a => a.CanStart()).Throws<InvalidInputException>();
 
             SyncSettings syncSettings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, EnumLogLevel.Info, _DefaultLogPath);
-            SyncWorker syncWorker = new SyncWorker(syncSettings, syncActionHandler.Object, mockHelper.IFileSystemMock.Object);
+            SyncWorker syncWorker = new SyncWorker(syncSettings, syncActionHandler.Object, mockHelper.IFileSystemMock.Object, new CancellationToken());
             Assert.Throws<InvalidInputException>( () => syncWorker.Start());
             syncActionHandler.Verify(a => a.CanStart());
             mockHelper.IDirectoryMock.VerifyNoOtherCalls();
