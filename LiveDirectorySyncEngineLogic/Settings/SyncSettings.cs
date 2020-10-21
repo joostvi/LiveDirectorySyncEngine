@@ -1,6 +1,7 @@
 ﻿using GenericClassLibrary.Logging;
 using LiveDirectorySyncEngineLogic.Generic.Model;
 using System;
+using System.Collections.Generic;
 
 namespace LiveDirectorySyncEngineLogic.Settings
 {
@@ -28,6 +29,19 @@ namespace LiveDirectorySyncEngineLogic.Settings
             TargetPath = @"C:\tmp\TestTarget";
             LogLevel = EnumLogLevel.Info;
             LogPath = @"c:\tmp";
+        }
+
+        public IDictionary<string, string> AsKeyValuePairs()
+        {
+            //TODO reflection?
+            var dict = new Dictionary<string, string>
+            {
+                { "SourcePath", SourcePath },
+                { "TargetPath", TargetPath },
+                { "LogLevel", LogLevel.ToString() },
+                { "LogPath", LogPath }
+            };
+            return dict;
         }
     }
 }

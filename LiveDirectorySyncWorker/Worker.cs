@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using GenericClassLibrary.Exceptions;
+using GenericClassLibrary.Logging.net.core;
 using LiveDirectorySyncEngineLogic;
 using LiveDirectorySyncEngineLogic.Generic.DataAccess;
 using LiveDirectorySyncEngineLogic.Settings;
@@ -26,8 +27,6 @@ namespace LiveDirectorySyncWorker
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("SyncService started");
-            //TODO implement async ISyncAction implementation with off line handling.
             using (IDBConnection connection = Container.GetDBConnection(_config))
             {
                 ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository(connection);
@@ -36,6 +35,9 @@ namespace LiveDirectorySyncWorker
                 {
                     throw new InvalidConfigurationException("Settings not found!");
                 }
+                var logMessage = settings.AsKeyValuePairs().CreateMessageWithDictValues("SyncService started.");
+                _logger.LogInformation(logMessage.Message, logMessage.Args);
+
                 worker = new SyncWorker(settings, Container.GetRealtimeNoneCacheSyncActionHandler(settings), Container.GetFileSystem(), cancellationToken);
             }
             try
