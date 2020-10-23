@@ -26,6 +26,7 @@ Also the concept of splitting the text from parameters in the logs could be an i
 
 ## Todo'/Improvements/Ideas
 I've the idea to improve this "application" to make it workable for my original idea. Having a continues backup. 
+- Log settings are now both in configuration file as well as in settings. This should be moved to configuration file. There is no need to sync between projects.
 - Add injection framework to replace "Container" class.
 - Experiment with reflection to get a more generic solution for AsKeyValuePairs in SyncSettings.
 - Handle scenario where target is of line. 
