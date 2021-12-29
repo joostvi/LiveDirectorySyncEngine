@@ -39,8 +39,7 @@ namespace LiveDirectorySyncWorker
         static void LoggerBuilder(ILoggingBuilder builder)
         {
             Logger.Level = EnumLogLevel.Debug; //Setting yes no?
-            builder.ClearProviders(); //Remove any default provider otherwise every thing will be logged to the console twice.
-            builder.AddProvider(new LogProvider());
+            builder.SetupProvider();
             builder.AddMyConsoleLogger();  //This is my own console logger.
         }
     }
