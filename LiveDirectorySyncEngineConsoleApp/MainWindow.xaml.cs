@@ -18,7 +18,7 @@ namespace LiveDirectorySyncEngineConsoleApp
 
         private SyncWorker _Worker;
         private BindingContext _bindingContext;
-        private readonly CancellationTokenSource _source = new CancellationTokenSource();
+        private readonly CancellationTokenSource _source = new ();
 
         public MainWindow()
         {
@@ -96,7 +96,7 @@ namespace LiveDirectorySyncEngineConsoleApp
                 using (IDBConnection connection = LiveDirectorySyncEngineLogic.Container.GetDBConnection())
                 {
                     ISyncSettingsRepository syncSettingsRepository = Container.GetSyncSettingsRepository(connection);
-                    SettingsValidator validator = new SettingsValidator(Container.GetFileSystem().Directory);
+                    SettingsValidator validator = new (Container.GetFileSystem().Directory);
                     validator.IsValid(_bindingContext.Settings);
                     syncSettingsRepository.Store(_bindingContext.Settings);
                     ResetLoggers(_bindingContext.Settings);

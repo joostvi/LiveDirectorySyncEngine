@@ -24,6 +24,11 @@ My conclusion is that I don't want to pass logging objects all around my code. B
 This means I need some "proxy" in for of logger or factory following the .net core logging factory pattern.
 Also the concept of splitting the text from parameters in the logs could be an interesting approach. In my day to day job we don't do this which makes it harder to find the number of times a certain log entry exists in the log.
 
+## .net 6. migration (Januari 2022)
+In order to migrade to .net 6 I ran the upgrade assistent created by Microsoft which can be found here: https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview 
+More details about how to run this can be founde here: https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-wpf-framework 
+
+
 ## Todo'/Improvements/Ideas
 I've the idea to improve this "application" to make it workable for my original idea. Having a continues backup. 
 - Log settings are now both in configuration file as well as in settings. This should be moved to configuration file. There is no need to sync between projects.
