@@ -5,8 +5,9 @@ using GenericClassLibrary.Validation;
 using LiveDirectorySyncEngineLogic.Settings;
 using LiveDirectorySyncEngineLogic.SyncActionModel;
 using GenericClassLibraryTests.Mocks;
-using Moq;
+using NSubstitute;
 using Xunit;
+using GenericNSubstituteTestHelpers;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
@@ -38,8 +39,8 @@ namespace LiveDirectorySyncEngineTests.UnitTests
                 OldFileName = "OldName",
                 NewFileName = "NewName"
             };
-            GetHandler(mockHelper.IFileSystemMock.Object).Rename(command);
-            mockHelper.IFileMock.Verify(a => a.Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName"));
+            GetHandler(mockHelper.IFileSystemMock).Rename(command);
+            mockHelper.IFileMock.Received().Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName");
         }
 
         [Fact]
@@ -55,8 +56,8 @@ namespace LiveDirectorySyncEngineTests.UnitTests
                 OldFileName = "OldName",
                 NewFileName = "NewName"
             };
-            GetHandler(mockHelper.IFileSystemMock.Object).Rename(command);
-            mockHelper.IFileMock.Verify(a => a.Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true));
+            GetHandler(mockHelper.IFileSystemMock).Rename(command);
+            mockHelper.IFileMock.Received().Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true);
         }
 
         [Fact]
@@ -73,8 +74,8 @@ namespace LiveDirectorySyncEngineTests.UnitTests
                 OldFileName = "OldName",
                 NewFileName = "NewName"
             };
-            GetHandler(mockHelper.IFileSystemMock.Object).Rename(command);
-            mockHelper.IDirectoryMock.Verify(a => a.Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName"));
+            GetHandler(mockHelper.IFileSystemMock).Rename(command);
+            mockHelper.IDirectoryMock.Received().Move(_DefaultTargetPath + "OldName", _DefaultTargetPath + "NewName");
         }
 
         [Fact]
@@ -91,8 +92,8 @@ namespace LiveDirectorySyncEngineTests.UnitTests
                 OldFileName = "OldName",
                 NewFileName = "NewName"
             };
-            GetHandler(mockHelper.IFileSystemMock.Object).Rename(command);
-            mockHelper.IDirectoryMock.Verify(a => a.Create(_DefaultTargetPath + "NewName"));
+            GetHandler(mockHelper.IFileSystemMock).Rename(command);
+            mockHelper.IDirectoryMock.Received().Create(_DefaultTargetPath + "NewName");
         }
 
         [Fact]
@@ -105,8 +106,8 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             {
                 SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
             };
-            GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
-            mockHelper.IFileMock.Verify(a => a.Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true));
+            GetHandler(mockHelper.IFileSystemMock).Create(command);
+            mockHelper.IFileMock.Received().Copy(_DefaultSourcePath + "NewName", _DefaultTargetPath + "NewName", true);
         }
 
         [Fact]
@@ -114,14 +115,14 @@ namespace LiveDirectorySyncEngineTests.UnitTests
         {
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
             mockHelper.Setup();
-            mockHelper.IFileMock.Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<FileNotFoundException>();
+            mockHelper.IFileMock.When(a => a.Copy(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>())).Do( a => throw new FileNotFoundException());
 
             SyncCreateActionCommand command = new SyncCreateActionCommand()
             {
                 SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
             };
             //this logic should accept file not found
-            GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
+            GetHandler(mockHelper.IFileSystemMock).Create(command);
         }
 
         [Fact]
@@ -130,14 +131,14 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             FileSystemMoqHelper mockHelper = new FileSystemMoqHelper();
             mockHelper.FileExists = true;
             mockHelper.Setup();
-            mockHelper.IFileMock.Setup(a => a.Copy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Throws<FileNotFoundException>();
+            mockHelper.IFileMock.When(a => a.Copy(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>())).Do( a => throw new FileNotFoundException());
 
             SyncUpdateActionCommand command = new SyncUpdateActionCommand()
             {
                 SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
             };
             //this logic should accept file not found
-            GetHandler(mockHelper.IFileSystemMock.Object).Update(command);
+            GetHandler(mockHelper.IFileSystemMock).Update(command);
         }
 
         [Fact]
@@ -169,8 +170,8 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             {
                 SourceFile = new SyncFileInfo(_DefaultSourcePath + "NewName")
             };
-            GetHandler(mockHelper.IFileSystemMock.Object).Create(command);
-            mockHelper.IDirectoryMock.Verify(a => a.Create(_DefaultTargetPath + "NewName"));
+            GetHandler(mockHelper.IFileSystemMock).Create(command);
+            mockHelper.IDirectoryMock.Received().Create(_DefaultTargetPath + "NewName");
         }
 
         [Fact]
@@ -199,10 +200,10 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.DirectoryExists = false;
             mockHelper.Setup();
 
-            var handler = GetHandler(mockHelper.IFileSystemMock.Object);
+            var handler = GetHandler(mockHelper.IFileSystemMock);
             Assert.Throws<InvalidInputException>(() => handler.CanStart());
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
-            mockHelper.IDirectoryMock.VerifyNoOtherCalls();
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultSourcePath);
+            mockHelper.IDirectoryMock.VerifyNoOtherCalls(new System.Collections.Generic.List<string>() { "Exists" });
         }
 
         [Fact]
@@ -213,12 +214,12 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.DirectoryExists = true;
             mockHelper.Setup();
 
-            mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultTargetPath)).Returns(false);
+            mockHelper.IDirectoryMock.Exists(_DefaultTargetPath).Returns(false);
 
-            var handler = GetHandler(mockHelper.IFileSystemMock.Object);
+            var handler = GetHandler(mockHelper.IFileSystemMock);
             Assert.Throws<InvalidInputException>(() => handler.CanStart());
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultTargetPath));
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultSourcePath);
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultTargetPath);
         }
     }
 }

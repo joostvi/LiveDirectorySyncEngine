@@ -3,6 +3,8 @@ using GenericClassLibraryTests.Mocks;
 using GenericClassLibrary.Validation;
 using GenericClassLibrary.Logging;
 using Xunit;
+using NSubstitute;
+using GenericNSubstituteTestHelpers;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
@@ -14,7 +16,7 @@ namespace LiveDirectorySyncEngineTests.UnitTests
         private const string _DefaultTargetPath = @"c:\target\";
         private const string _DefaultLogPath = @"c:\logpath\";
 
-        private SyncSettings GetSettings(string logPath = _DefaultLogPath)
+        private static SyncSettings GetSettings(string logPath = _DefaultLogPath)
         {
             return new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, EnumLogLevel.Info, logPath);
         }
@@ -26,10 +28,10 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.FileExists = true;
             mockHelper.DirectoryExists = false;
             mockHelper.Setup();
-            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock.Object);
+            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock);
             Assert.Throws<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
-            mockHelper.IDirectoryMock.VerifyNoOtherCalls();
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultSourcePath);
+            mockHelper.IDirectoryMock.VerifyNoOtherCalls( new System.Collections.Generic.List<string>() {"Exists"});
         }
 
         [Fact]
@@ -42,12 +44,12 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             };
             mockHelper.Setup();
 
-            mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultTargetPath)).Returns(false);
+            mockHelper.IDirectoryMock.Exists(_DefaultTargetPath).Returns(false);
 
-            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock.Object);
+            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock);
             Assert.Throws<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultTargetPath));
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultSourcePath);
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultTargetPath);
         }
 
         [Fact]
@@ -58,13 +60,13 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.DirectoryExists = true;
             mockHelper.Setup();
 
-            mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultLogPath)).Returns(false);
+            mockHelper.IDirectoryMock.Exists(_DefaultLogPath).Returns(false);
 
-            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock.Object);
+            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock);
             Assert.Throws<InvalidInputException>(() => settingsValidator.IsValid(GetSettings()));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultTargetPath));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultLogPath));
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultSourcePath);
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultTargetPath);
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultLogPath);
         }
 
         [Fact]
@@ -75,14 +77,14 @@ namespace LiveDirectorySyncEngineTests.UnitTests
             mockHelper.DirectoryExists = false;
             mockHelper.Setup();
 
-            mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultSourcePath)).Returns(true);
-            mockHelper.IDirectoryMock.Setup(a => a.Exists(_DefaultTargetPath)).Returns(true);
+            mockHelper.IDirectoryMock.Exists(_DefaultSourcePath).Returns(true);
+            mockHelper.IDirectoryMock.Exists(_DefaultTargetPath).Returns(true);
 
-            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock.Object);
+            SettingsValidator settingsValidator = new SettingsValidator(mockHelper.IDirectoryMock);
             settingsValidator.IsValid(GetSettings(logPath: string.Empty));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultSourcePath));
-            mockHelper.IDirectoryMock.Verify(a => a.Exists(_DefaultTargetPath));
-            mockHelper.IDirectoryMock.VerifyNoOtherCalls();
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultSourcePath);
+            mockHelper.IDirectoryMock.Received().Exists(_DefaultTargetPath);
+            mockHelper.IDirectoryMock.VerifyNoOtherCalls(new System.Collections.Generic.List<string>() { "Exists" });
         }
     }
 }

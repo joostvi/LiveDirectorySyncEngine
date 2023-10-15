@@ -168,7 +168,7 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
-      "YamlDotNet/13.1.1": {
+      "YamlDotNet/13.7.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/YamlDotNet.dll": {
@@ -188,7 +188,7 @@
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.Extensions.Logging": "7.0.0",
           "Newtonsoft.Json": "13.0.3",
-          "YamlDotNet": "13.1.1"
+          "YamlDotNet": "13.7.0"
         },
         "compile": {
           "bin/placeholder/GenericClassLibrary.dll": {}
@@ -519,10 +519,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "YamlDotNet/13.1.1": {
-      "sha512": "3AS0fEwxOucP0h68JXMxfj3NyfgX9EOVE29NlKqKxWMHfKMAuZ7MWw5u362Bs6OALtnBTzi/JYIiMidQXoKVWw==",
+    "YamlDotNet/13.7.0": {
+      "sha512": "RKkoQSCyk/94N20SL3U15hWAqBVXHu+59upcPi8R2uhrcAalyVa4Y/vYdXQ7MXQ71Lut//DH0tLcYByAkGmXhA==",
       "type": "package",
-      "path": "yamldotnet/13.1.1",
+      "path": "yamldotnet/13.7.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -542,7 +542,7 @@
         "lib/netstandard2.0/YamlDotNet.xml",
         "lib/netstandard2.1/YamlDotNet.dll",
         "lib/netstandard2.1/YamlDotNet.xml",
-        "yamldotnet.13.1.1.nupkg.sha512",
+        "yamldotnet.13.7.0.nupkg.sha512",
         "yamldotnet.nuspec"
       ]
     },
@@ -634,7 +634,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

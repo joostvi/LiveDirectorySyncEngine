@@ -4,9 +4,10 @@ using LiveDirectorySyncEngineLogic.SyncActionModel;
 using GenericClassLibraryTests.Mocks;
 using GenericClassLibrary.Logging;
 using GenericClassLibrary.Validation;
-using Moq;
+using NSubstitute;
 using Xunit;
 using System.Threading;
+using GenericNSubstituteTestHelpers;
 
 namespace LiveDirectorySyncEngineTests.UnitTests
 {
@@ -27,14 +28,14 @@ namespace LiveDirectorySyncEngineTests.UnitTests
                 DirectoryExists = false
             };
             mockHelper.Setup();
-            Mock<ISyncActionHandler> syncActionHandler = new Mock<ISyncActionHandler>();
-            syncActionHandler.Setup(a => a.CanStart()).Throws<InvalidInputException>();
+            var syncActionHandler = Substitute.For<ISyncActionHandler>();
+            syncActionHandler.When( a => a.CanStart()).Do( a => throw new InvalidInputException());
 
             SyncSettings syncSettings = new SyncSettings(_DefaultSourcePath, _DefaultTargetPath, EnumLogLevel.Info, _DefaultLogPath);
-            SyncWorker syncWorker = new SyncWorker(syncSettings, syncActionHandler.Object, mockHelper.IFileSystemMock.Object, new CancellationToken());
+            SyncWorker syncWorker = new SyncWorker(syncSettings, syncActionHandler, mockHelper.IFileSystemMock, new CancellationToken());
             Assert.Throws<InvalidInputException>( () => syncWorker.Start());
-            syncActionHandler.Verify(a => a.CanStart());
-            mockHelper.IDirectoryMock.VerifyNoOtherCalls();
+            syncActionHandler.Received().CanStart();
+            mockHelper.IDirectoryMock.VerifyNoCalls();
         }
     }
 }
